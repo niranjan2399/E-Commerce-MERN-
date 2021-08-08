@@ -1,0 +1,17 @@
+.regContainer {
+  position: relative;
+  width: 100vw;
+  height: calc(100vh - 4.5rem);
+
+  .regContainer__progress {
+    position: absolute;
+    height: 100%;
+    background-color: #212112;
+    width: 5rem;
+  }
+
+  .regContainer__register {
+    position: absolute;
+    z-index: 1;
+  }
+}
