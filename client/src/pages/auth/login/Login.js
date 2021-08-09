@@ -7,6 +7,8 @@ import { auth, googleAuthProvider } from "../../../firebase";
 import { useHistory, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
+import axios from "../../../axios";
+import { createUser } from "../../../utils/auth";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -14,6 +16,14 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const roleBasedRedirect = (role) => {
+    if (role === "admin") {
+      history.push("/admin/dashboard");
+    } else {
+      history.push("/user/history");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,17 +35,22 @@ function Login() {
         .signInWithEmailAndPassword(email, password);
 
       const { user } = res;
-      const token = await user.getIdTokenResult();
+      const tokenId = await user.getIdTokenResult();
+
+      const resUser = await axios.post(`/user/${email}`);
+      const [{ name, role, _id }] = resUser.data;
 
       dispatch({
         type: "LOGIN",
         payload: {
-          email: user.email,
-          token: token.token,
+          email,
+          name,
+          token: tokenId.token,
+          role,
+          _id,
         },
       });
-
-      history.push("/");
+      roleBasedRedirect(role);
     } catch (err) {
       toast.error(err.message);
       setLoading(false);
@@ -47,13 +62,19 @@ function Login() {
       const res = await auth.signInWithPopup(googleAuthProvider);
 
       const { user } = res;
-      const token = await user.getIdTokenResult();
+      const tokenId = await user.getIdTokenResult();
+
+      const resUser = await createUser(tokenId.token, {});
+      console.log(resUser.data);
 
       dispatch({
         type: "LOGIN",
         payload: {
-          email: user.email,
-          token: token.token,
+          email: resUser.data.email,
+          token: tokenId.token,
+          name: resUser.data.name,
+          role: resUser.data.role,
+          _id: resUser.data._id,
         },
       });
 
@@ -73,6 +94,7 @@ function Login() {
             className="loginContainer__input"
             autoFocus
             value={email}
+            placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
           />

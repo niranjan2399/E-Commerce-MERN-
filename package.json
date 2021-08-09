@@ -1,0 +1,23 @@
+{
+  "name": "ecommerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \" cd server && npm run dev\" \"cd client && npm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/niranjan2399/E-Commerce-MERN-.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/niranjan2399/E-Commerce-MERN-/issues"
+  },
+  "homepage": "https://github.com/niranjan2399/E-Commerce-MERN-#readme",
+  "dependencies": {
+    "concurrently": "^6.2.1"
+  }
+}

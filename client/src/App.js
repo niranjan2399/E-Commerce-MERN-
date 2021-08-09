@@ -1,17 +1,25 @@
+import { useEffect } from "react";
 import "./app.scss";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { auth } from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "./axios";
 
 import NavBar from "./components/navbar/Navbar";
 import Home from "./pages/home/Home";
 import Login from "./pages/auth/login/Login";
 import Register from "./pages/auth/register/Register";
 import RegisterComplete from "./pages/auth/registerComplete/RegisterComplete";
-import { useEffect } from "react";
 import ForgotPassword from "./pages/auth/forgotPassword/ForgotPassword";
+import History from "./pages/user/history/History";
+import LoadingToRedirect from "./components/loadingToRedirect/LoadingToRedirect";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,12 +29,17 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const tokenId = await user.getIdTokenResult();
+        const res = await axios.post(`/user/${user.email}`);
+        const [{ name, role, _id }] = res.data;
 
         dispatch({
           type: "LOGIN",
           payload: {
             email: user.email,
             token: tokenId.token,
+            name,
+            role,
+            _id,
           },
         });
       }
@@ -45,22 +58,27 @@ function App() {
         <Route
           path="/login"
           exact
-          render={() => (user ? <Home /> : <Login />)}
+          render={() => (user ? <Redirect to="/" /> : <Login />)}
         />
         <Route
           path="/register"
           exact
-          render={() => (user ? <Home /> : <Register />)}
+          render={() => (user ? <Redirect to="/" /> : <Register />)}
+        />
+        <Route
+          path="/user/history"
+          exact
+          render={() => (user ? <History /> : <LoadingToRedirect />)}
         />
         <Route
           path="/register/complete"
           exact
-          render={() => (user ? <Home /> : <RegisterComplete />)}
+          render={() => (user ? <Redirect to="/" /> : <RegisterComplete />)}
         />
         <Route
           path="/forgot-password"
           exact
-          render={() => (user ? <Home /> : <ForgotPassword />)}
+          render={() => (user ? <Redirect to="/" /> : <ForgotPassword />)}
         />
       </Switch>
     </Router>

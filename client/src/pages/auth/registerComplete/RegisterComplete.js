@@ -3,12 +3,18 @@ import { useHistory } from "react-router-dom";
 import "./registerComplete.scss";
 import { auth } from "../../../firebase";
 import { toast } from "react-toastify";
+import { createUser } from "../../../utils/auth";
+import { useDispatch } from "react-redux";
+import axios from "../../../axios";
 
 function RegisterComplete() {
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const history = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setEmail(window.localStorage.getItem("registeredEmail"));
@@ -23,23 +29,47 @@ function RegisterComplete() {
 
     if (password === confirmPassword) {
       try {
-        const res = await auth.signInWithEmailLink(email, window.location.href);
+        const checkUser = await axios.post(`/user/${email}`);
+        if (!checkUser) {
+          const res = await auth.signInWithEmailLink(
+            email,
+            window.location.href
+          );
 
-        if (res.user.emailVerified) {
-          // delete email from localStorage
-          window.localStorage.removeItem("registeredEmail");
+          if (res.user.emailVerified) {
+            // delete email from localStorage
+            window.localStorage.removeItem("registeredEmail");
 
-          // get user id token
-          let user = auth.currentUser;
-          await user.updatePassword(password);
-          let tokenId = await user.getIdTokenResult();
+            // get user id token
+            let user = auth.currentUser;
+            await user.updatePassword(password);
+            let tokenId = await user.getIdTokenResult();
 
-          // redux store
-          // redirect
-          history.push("/");
+            // redux store
+            const resApi = await createUser(tokenId.token, {
+              name: `${firstName} ${lastName}`,
+            });
+
+            dispatch({
+              type: "LOGIN",
+              payload: {
+                email: resApi.data.email,
+                name: resApi.data.name,
+                token: tokenId.token,
+                role: resApi.data.role,
+                _id: resApi.data._id,
+              },
+            });
+
+            // redirect
+            history.push("/");
+          }
+        } else {
+          toast.error("User already exists. Please try to login");
+          history.push("/login");
         }
       } catch (err) {
-        toast.error(err.message);
+        toast.error(err);
       }
     } else {
       console.log("Passwords don't match");
@@ -54,6 +84,21 @@ function RegisterComplete() {
         <form className="rcContainer__form" onSubmit={handleSubmit}>
           <input
             type="text"
+            value={firstName}
+            autoFocus
+            placeholder="First Name"
+            id="FirstName"
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <input
+            type="text"
+            value={lastName}
+            placeholder="Last Name"
+            id="lastName"
+            onChange={(e) => setLastName(e.target.value)}
+          />
+          <input
+            type="text"
             className="rcContainer__input"
             value={email}
             disabled
@@ -63,7 +108,6 @@ function RegisterComplete() {
             name=""
             id="password"
             placeholder="Password"
-            autoFocus
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="password"

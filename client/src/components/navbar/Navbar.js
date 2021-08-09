@@ -90,7 +90,7 @@ function Navbar() {
           </div>
         ) : (
           <div className="navContainer__options">
-            <span>Hello, Niranjan</span>
+            <span>Hello, {user.name.split(" ")[0]}</span>
             <div className="navContainer__selector">
               <div className="navContainer__opt"></div>
               <div className="navContainer__opt" onClick={handleLogout}>
