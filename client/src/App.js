@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./app.scss";
 import {
   BrowserRouter as Router,
@@ -10,9 +10,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { auth } from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "./axios";
+import { currentUser, currentAdmin } from "./utils/auth";
 
-import NavBar from "./components/navbar/Navbar";
 import Home from "./pages/home/Home";
 import Login from "./pages/auth/login/Login";
 import Register from "./pages/auth/register/Register";
@@ -20,8 +19,12 @@ import RegisterComplete from "./pages/auth/registerComplete/RegisterComplete";
 import ForgotPassword from "./pages/auth/forgotPassword/ForgotPassword";
 import History from "./pages/user/history/History";
 import LoadingToRedirect from "./components/loadingToRedirect/LoadingToRedirect";
+import UserSidebar from "./components/userSidebar/UserSidebar";
+import Password from "./pages/user/password/Password";
+import Dashboard from "./pages/admin/dashboard/Dashboard";
 
 function App() {
+  const [isAdmin, setIsAdmin] = useState(false);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -29,7 +32,7 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const tokenId = await user.getIdTokenResult();
-        const res = await axios.post(`/user/${user.email}`);
+        const res = await currentUser(tokenId.token);
         const [{ name, role, _id }] = res.data;
 
         dispatch({
@@ -49,9 +52,23 @@ function App() {
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    if (user) {
+      const isAdmin = async () => {
+        try {
+          await currentAdmin(user.token);
+          setIsAdmin(true);
+        } catch (err) {
+          console.log(err);
+          setIsAdmin(false);
+        }
+      };
+      isAdmin();
+    }
+  }, [user]);
+
   return (
     <Router>
-      <NavBar />
       <ToastContainer />
       <Switch>
         <Route path="/" exact render={() => <Home />} />
@@ -66,11 +83,6 @@ function App() {
           render={() => (user ? <Redirect to="/" /> : <Register />)}
         />
         <Route
-          path="/user/history"
-          exact
-          render={() => (user ? <History /> : <LoadingToRedirect />)}
-        />
-        <Route
           path="/register/complete"
           exact
           render={() => (user ? <Redirect to="/" /> : <RegisterComplete />)}
@@ -79,6 +91,25 @@ function App() {
           path="/forgot-password"
           exact
           render={() => (user ? <Redirect to="/" /> : <ForgotPassword />)}
+        />
+
+        {/* user Routes */}
+        <Route
+          path="/user/history"
+          exact
+          render={() => (user ? <History /> : <LoadingToRedirect />)}
+        />
+        <Route
+          path="/user/password"
+          exact
+          render={() => (user ? <Password /> : <LoadingToRedirect />)}
+        />
+
+        {/* admin Routes */}
+        <Route
+          path="/admin/dashboard"
+          exact
+          render={() => (isAdmin ? <Dashboard /> : <LoadingToRedirect />)}
         />
       </Switch>
     </Router>

@@ -1,18 +1,18 @@
 import React from "react";
-import Navbar from "../../components/navbar/Navbar";
+import Navbar from "../../../components/navbar/Navbar";
 import { useSelector } from "react-redux";
-import UserSidebar from "../../components/userSidebar/UserSidebar";
+import UserSidebar from "../../../components/userSidebar/UserSidebar";
 
-function Home() {
+function Dashboard() {
   const { user } = useSelector((state) => ({ ...state }));
-  
+
   return (
     <>
       <Navbar />
       {user && <UserSidebar />}
-      <div>home</div>
+      <div>dahsboard</div>
     </>
   );
 }
 
-export default Home;
+export default Dashboard;

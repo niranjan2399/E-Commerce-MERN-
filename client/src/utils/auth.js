@@ -1,9 +1,29 @@
 import axios from "../axios";
 
-export const createUser = async (authToken, data) => {
-  return await axios.post("/create-user", data, {
+export const createUserOrUpdate = async (authToken, data) => {
+  return await axios.post("/auth/create-or-update-user", data, {
     headers: {
       authtoken: authToken,
     },
   });
+};
+
+export const currentUser = async (authToken) => {
+  return await axios.post(
+    "/auth/current-user",
+    {},
+    {
+      headers: {
+        authtoken: authToken,
+      },
+    }
+  );
+};
+
+export const currentAdmin = async (authToken) => {
+  return await axios.post(
+    "/auth/current-admin",
+    {},
+    { headers: { authtoken: authToken } }
+  );
 };

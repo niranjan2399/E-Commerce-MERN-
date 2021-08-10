@@ -3,15 +3,17 @@ import "./navbar.scss";
 import { NavLink, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import firebase from "firebase";
+import { IconButton, Badge } from "@material-ui/core";
+import {
+  ShoppingCart,
+  Search,
+  Person,
+  PersonAdd,
+  Dashboard,
+} from "@material-ui/icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSearch,
-  faUser,
-  faShoppingCart,
-  faUserPlus,
-  faSignOutAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
   const [select, setSelect] = useState("login");
@@ -52,7 +54,7 @@ function Navbar() {
         </NavLink>
         <div className="navContainer__search">
           <input type="text" placeholder="Search" />
-          <FontAwesomeIcon icon={faSearch} className="search__icon" />
+          <Search className="search__icon" />
         </div>
       </div>
       <div className="navContainer__right">
@@ -67,10 +69,7 @@ function Navbar() {
                 className="navContainer__opt"
                 onClick={() => setSelect("login")}
               >
-                <FontAwesomeIcon
-                  icon={faUser}
-                  style={{ marginRight: ".5rem" }}
-                />
+                <Person className="navContainer__icon" />
                 Login
               </NavLink>
               <NavLink
@@ -80,10 +79,7 @@ function Navbar() {
                 className="navContainer__opt"
                 onClick={() => setSelect("register")}
               >
-                <FontAwesomeIcon
-                  icon={faUserPlus}
-                  style={{ marginRight: ".5rem" }}
-                />
+                <PersonAdd className="navContainer__icon" />
                 Register
               </NavLink>
             </div>
@@ -92,11 +88,14 @@ function Navbar() {
           <div className="navContainer__options">
             <span>Hello, {user.name.split(" ")[0]}</span>
             <div className="navContainer__selector">
-              <div className="navContainer__opt"></div>
+              <div className="navContainer__opt">
+                <Dashboard className="navContainer__icon" />
+                Dashboard
+              </div>
               <div className="navContainer__opt" onClick={handleLogout}>
                 <FontAwesomeIcon
+                  className="navContainer__icon"
                   icon={faSignOutAlt}
-                  style={{ marginRight: ".5rem" }}
                 />
                 Logout
               </div>
@@ -107,9 +106,19 @@ function Navbar() {
           to="/cart"
           exact
           activeClassName="active"
-          className="navContainer__link"
+          className="navContainer__cart"
         >
-          <FontAwesomeIcon icon={faShoppingCart} />
+          <IconButton
+            style={{
+              width: "2.5rem",
+              height: "2.5rem",
+              transition: "all 200ms linear",
+            }}
+          >
+            <Badge badgeContent={1} color="secondary" max={5}>
+              <ShoppingCart />
+            </Badge>
+          </IconButton>
         </NavLink>
       </div>
     </div>

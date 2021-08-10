@@ -76,6 +76,7 @@
     }
 
     .navContainer__search {
+      display: flex;
       color: #212112;
       margin-left: 1.25rem;
 
@@ -129,7 +130,8 @@
         top: 4rem;
         flex-direction: column;
         left: 50%;
-        width: 8.25rem;
+        width: fit-content;
+        font-size: 0.85rem;
         transform: translateX(-50%);
         background-color: white;
         border: 2px solid #8167a9;
@@ -148,7 +150,23 @@
       }
     }
 
+    .navContainer__cart {
+      margin-left: 1rem;
+
+      &.active {
+        span {
+          color: #777;
+        }
+      }
+
+      span {
+        color: #212112;
+      }
+    }
+
     .navContainer__opt {
+      display: flex;
+      align-items: center;
       padding: 0.5rem;
       margin-inline: 0.5rem;
       text-decoration: none;
@@ -163,6 +181,11 @@
 
       &:hover {
         background-color: rgba(119, 119, 119, 0.493);
+      }
+
+      .navContainer__icon {
+        margin-right: 0.5rem;
+        font-size: 1rem;
       }
     }
   }

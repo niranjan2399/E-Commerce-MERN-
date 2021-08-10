@@ -3,9 +3,8 @@ import { useHistory } from "react-router-dom";
 import "./registerComplete.scss";
 import { auth } from "../../../firebase";
 import { toast } from "react-toastify";
-import { createUser } from "../../../utils/auth";
+import { createUserOrUpdate } from "../../../utils/auth";
 import { useDispatch } from "react-redux";
-import axios from "../../../axios";
 
 function RegisterComplete() {
   const [email, setEmail] = useState("");
@@ -29,44 +28,35 @@ function RegisterComplete() {
 
     if (password === confirmPassword) {
       try {
-        const checkUser = await axios.post(`/user/${email}`);
-        if (!checkUser) {
-          const res = await auth.signInWithEmailLink(
-            email,
-            window.location.href
-          );
+        const res = await auth.signInWithEmailLink(email, window.location.href);
 
-          if (res.user.emailVerified) {
-            // delete email from localStorage
-            window.localStorage.removeItem("registeredEmail");
+        if (res.user.emailVerified) {
+          // delete email from localStorage
+          window.localStorage.removeItem("registeredEmail");
 
-            // get user id token
-            let user = auth.currentUser;
-            await user.updatePassword(password);
-            let tokenId = await user.getIdTokenResult();
+          // get user id token
+          let user = auth.currentUser;
+          await user.updatePassword(password);
+          let tokenId = await user.getIdTokenResult();
 
-            // redux store
-            const resApi = await createUser(tokenId.token, {
-              name: `${firstName} ${lastName}`,
-            });
+          // redux store
+          const resApi = await createUserOrUpdate(tokenId.token, {
+            name: `${firstName} ${lastName}`,
+          });
 
-            dispatch({
-              type: "LOGIN",
-              payload: {
-                email: resApi.data.email,
-                name: resApi.data.name,
-                token: tokenId.token,
-                role: resApi.data.role,
-                _id: resApi.data._id,
-              },
-            });
+          dispatch({
+            type: "LOGIN",
+            payload: {
+              email: resApi.data.email,
+              name: resApi.data.name,
+              token: tokenId.token,
+              role: resApi.data.role,
+              _id: resApi.data._id,
+            },
+          });
 
-            // redirect
-            history.push("/");
-          }
-        } else {
-          toast.error("User already exists. Please try to login");
-          history.push("/login");
+          // redirect
+          history.push("/");
         }
       } catch (err) {
         toast.error(err);
