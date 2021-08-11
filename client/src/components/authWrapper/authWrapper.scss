@@ -1,0 +1,41 @@
+.wrapperContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1rem;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("https://www.ivang-design.com/svg-load/parallax/parallax-01.png");
+  background-size: cover;
+  background-color: #1f2029;
+
+  .wrapperContainer__logo {
+    font-family: "Abril Fatface", cursive !important;
+    font-size: 3rem;
+    margin-bottom: 1.75rem;
+    text-decoration: none;
+    color: white;
+  }
+
+  .wrapperContainer__mainDiv {
+    width: fit-content;
+  }
+  .wrapperContainer__bottomButton {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: #212112;
+    width: 100%;
+    background: white;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+    &:hover {
+      box-shadow: 0 0.6rem 2rem 0 rgba(255, 235, 167, 0.25);
+      background: linear-gradient(125deg, #ffeaa7, white);
+    }
+  }
+}

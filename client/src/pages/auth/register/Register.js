@@ -2,8 +2,14 @@ import React, { useState } from "react";
 import "./register.scss";
 import { auth } from "../../../firebase";
 import { toast } from "react-toastify";
+import AuthWrapper from "../../../components/authWrapper/AuthWrapper";
+import { handleError } from "../../../utils/handleError";
 
 function Register() {
+  return <AuthWrapper children={<RegisterForm />} />;
+}
+
+const RegisterForm = () => {
   const [email, setEmail] = useState("");
 
   const handleSubmit = async (e) => {
@@ -24,34 +30,35 @@ function Register() {
       window.localStorage.setItem("registeredEmail", email);
       setEmail("");
     } catch (err) {
-      console.log(err);
+      toast.error(err.message);
     }
   };
 
   return (
     <div className="regContainer">
       {/* <div className="regContainer__progress"></div> */}
-      <div className="regContainer__register">
-        <h3>Register</h3>
-        <form className="regContainer__form" onSubmit={handleSubmit}>
+      <span className="regContainer__head">Register</span>
+      <form className="regContainer__form" onSubmit={handleSubmit}>
+        <div className="regContainer__inputContainer">
           <input
             type="text"
+            name="input"
             className="regContainer__input"
             autoFocus
+            required
             value={email}
+            onInvalidCapture={(e) => handleError(e)}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <button
-            className="regContainer__button"
-            type="submit"
-            disabled={!email}
-          >
-            Register
-          </button>
-        </form>
-      </div>
+          <label htmlFor="input">Email</label>
+          <div className="regContainer__inputBottom"></div>
+        </div>
+        <button className="regContainer__button" type="submit">
+          Register
+        </button>
+      </form>
     </div>
   );
-}
+};
 
 export default Register;

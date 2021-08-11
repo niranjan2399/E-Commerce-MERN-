@@ -5,8 +5,14 @@ import { auth } from "../../../firebase";
 import { toast } from "react-toastify";
 import { createUserOrUpdate } from "../../../utils/auth";
 import { useDispatch } from "react-redux";
+import AuthWrapper from "../../../components/authWrapper/AuthWrapper";
+import { handleError } from "../../../utils/handleError";
 
 function RegisterComplete() {
+  return <AuthWrapper children={<RegisterCompleteForm />} />;
+}
+
+const RegisterCompleteForm = () => {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -59,69 +65,100 @@ function RegisterComplete() {
           history.push("/");
         }
       } catch (err) {
-        toast.error(err);
+        toast.error(err.message);
       }
     } else {
-      console.log("Passwords don't match");
+      toast.error("Passwords don't match");
     }
   };
 
   return (
     <div className="rcContainer">
       {/* <div className="regContainer__progress"></div> */}
-      <div className="rcContainer__register">
-        <h3>Complete Registration</h3>
-        <form className="rcContainer__form" onSubmit={handleSubmit}>
+      <span className="rcContainer__head">Complete Registration</span>
+      <form className="rcContainer__form" onSubmit={handleSubmit}>
+        <div className="rcContainer__inputContainer">
           <input
             type="text"
             value={firstName}
+            className="rcContainer__input"
             autoFocus
-            placeholder="First Name"
             id="FirstName"
+            onInvalidCapture={(e) => handleError(e)}
+            required
             onChange={(e) => setFirstName(e.target.value)}
+            name="firstName"
           />
+          <label htmlFor="firstName">First Name</label>
+          <div className="rcContainer__inputBottom"></div>
+        </div>
+        <div className="rcContainer__inputContainer">
           <input
             type="text"
             value={lastName}
-            placeholder="Last Name"
-            id="lastName"
-            onChange={(e) => setLastName(e.target.value)}
-          />
-          <input
-            type="text"
             className="rcContainer__input"
-            value={email}
-            disabled
+            onInvalidCapture={(e) => handleError(e)}
+            id="lastName"
+            required
+            onChange={(e) => setLastName(e.target.value)}
+            name="lastName"
           />
+          <label htmlFor="lastName">Last Name</label>
+          <div className="rcContainer__inputBottom"></div>
+        </div>
+        <div className="rcContainer__inputContainer">
+          <div className="rcContainer__inputContainer">
+            <input
+              type="text"
+              value={email}
+              required
+              className="rcContainer__input rcContainer__input--disabled"
+              disabled
+            />
+            <div className="rcContainer__inputBottom"></div>
+          </div>
+        </div>
+        <div className="rcContainer__inputContainer">
           <input
             type="password"
-            name=""
+            name="password"
+            className="rcContainer__input"
             id="password"
-            placeholder="Password"
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onInvalidCapture={(e) => handleError(e)}
             autoComplete="password"
           />
+          <label htmlFor="password">Password</label>
+          <div className="rcContainer__inputBottom"></div>
+        </div>
+        <div className="rcContainer__inputContainer">
           <input
             type="password"
-            name=""
+            name="cfPassword"
+            className="rcContainer__input"
             id="cfPassword"
-            placeholder="Confirm Password"
+            required
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            onInvalidCapture={(e) => handleError(e)}
             autoComplete="cfPassword"
           />
-          <button
-            className="rcContainer__button"
-            type="submit"
-            disabled={password.length < 6}
-          >
-            Submit
-          </button>
-        </form>
-      </div>
+          <label htmlFor="cfPassword">Confirm Password</label>
+          <div className="rcContainer__inputBottom"></div>
+        </div>
+        <button className="rcContainer__button" type="submit">
+          Submit
+        </button>
+      </form>
+      {password.length < 6 && password.length >= 1 && (
+        <div className="rcContainer__error">
+          <span>Password must be 6 characters long</span>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default RegisterComplete;

@@ -19,7 +19,6 @@ import RegisterComplete from "./pages/auth/registerComplete/RegisterComplete";
 import ForgotPassword from "./pages/auth/forgotPassword/ForgotPassword";
 import History from "./pages/user/history/History";
 import LoadingToRedirect from "./components/loadingToRedirect/LoadingToRedirect";
-import UserSidebar from "./components/userSidebar/UserSidebar";
 import Password from "./pages/user/password/Password";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 
