@@ -11,12 +11,11 @@
 
 body {
   font-family: "Poppins", sans-serif;
-  background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat-back.svg");
-  background-size: 7%;
+  background-color: white;
   transition: all 200ms linear;
   min-height: 100vh;
-  width: 100vw;
-  // overflow-x: hidden;
+  width: calc(100vw - 0.25rem);
+  overflow-x: hidden;
 }
 
 ::selection {
@@ -32,4 +31,18 @@ body {
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
   box-shadow: 0 0 0px 1.5rem rgba(255, 255, 96, 0.39) inset;
+}
+
+::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+::-webkit-scrollbar-track {
+  background-color: white;
+  border-radius: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #8167a9;
+  border-radius: 0.5rem;
 }

@@ -1,13 +1,16 @@
 .navContainer {
+  position: sticky;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  top: 0;
   width: 100vw;
   height: 4.5rem;
   padding-inline: 2rem;
   background-color: #fff;
-  box-shadow: 0 10px 30px 0 rgba(138, 155, 165, 0.15);
+  border-bottom: 1px solid #eee;
   transition: all 0.3s ease-out;
+  z-index: 2;
 
   .navContainer__logo {
     font-family: "Abril Fatface", cursive !important;
@@ -73,30 +76,6 @@
       font-family: "Fredericka the Great", cursive;
       font-weight: 600;
       font-size: 2rem;
-    }
-
-    .navContainer__search {
-      display: flex;
-      color: #212112;
-      margin-left: 1.25rem;
-
-      input {
-        padding-block: 0.25rem;
-        margin-right: 0.5rem;
-        background-color: transparent;
-        border: none;
-        border-bottom: 2px solid #212112;
-
-        &:focus {
-          outline: none;
-          color: #777;
-          border-bottom: 2px solid #777;
-
-          & + .search__icon {
-            color: #777;
-          }
-        }
-      }
     }
   }
 
@@ -180,7 +159,7 @@
       }
 
       &:hover {
-        background-color: rgba(119, 119, 119, 0.493);
+        background-color: rgba(51, 51, 51, 0.151);
       }
 
       .navContainer__icon {

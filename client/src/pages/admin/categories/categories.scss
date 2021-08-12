@@ -1,0 +1,101 @@
+.categoryContainer {
+  display: flex;
+
+  .categoryContainer__main {
+    position: relative;
+    width: calc(100% - 18rem);
+    padding-block: 1rem;
+    padding-inline: 1.5rem;
+
+    .categoryContainer__form {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%) scale(0);
+      padding: 1.125rem;
+      width: 50%;
+      border-radius: 0.25rem;
+      z-index: 1;
+      background-color: rgb(250, 246, 237);
+
+      &.reveal {
+        animation: zoomIn 0.5s 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+
+        &.hide {
+          animation: zoomOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+      }
+    }
+
+    .categoryContainer__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eeeeee;
+      margin-bottom: 1.25rem;
+
+      .categoryContainer__title {
+        font-size: 1.5rem;
+      }
+
+      button {
+        display: flex;
+        align-items: center;
+        padding: 0.35rem;
+        cursor: pointer;
+      }
+    }
+
+    .categoryContainer__bottom {
+      .categoryContainer__category {
+        border: 1px solid #dddddd;
+        padding-inline: 1.25rem;
+        border-radius: 0.25rem;
+        padding-block: 0.35rem;
+        margin-bottom: 0.75rem;
+        transition: all 200ms linear;
+      }
+
+      .categoryContainer__upper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        font-size: 0.875rem;
+
+        &:hover {
+          .categoryContainer__right {
+            visibility: visible;
+          }
+        }
+
+        .categoryContainer__left {
+          display: flex;
+          align-items: center;
+        }
+
+        .categoryContainer__right {
+          visibility: hidden;
+          display: flex;
+          justify-content: space-around;
+          border-radius: 1.5rem;
+          padding: 0.25rem;
+          width: 6.5rem;
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+      }
+    }
+  }
+
+  .categoryContainer__warning {
+    display: flex;
+    align-items: center;
+    padding-inline: 1rem;
+    padding-block: 0.75rem;
+    color: yellow;
+    font-size: 0.875rem;
+    background-color: #332b00;
+    border-radius: 0.25rem;
+  }
+}

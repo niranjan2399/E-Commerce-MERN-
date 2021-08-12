@@ -14,8 +14,10 @@ import {
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import LocalSearch from "../LocalSearch/LocalSearch";
 
 function Navbar() {
+  const [keyword, setKeyword] = useState("");
   const [select, setSelect] = useState("login");
   const history = useHistory();
   const dispatch = useDispatch();
@@ -34,7 +36,7 @@ function Navbar() {
   };
 
   return (
-    <div className="navContainer">
+    <nav className="navContainer">
       <div className="navContainer__left">
         <NavLink
           to="/"
@@ -52,10 +54,16 @@ function Navbar() {
         >
           <span>Shop</span>
         </NavLink>
-        <div className="navContainer__search">
+        <LocalSearch
+          sendClass="navContainer__search"
+          keyword={keyword}
+          setKeyword={setKeyword}
+          placeholder="Search"
+        />
+        {/* <div className="navContainer__search">
           <input type="text" placeholder="Search" />
           <Search className="search__icon" />
-        </div>
+        </div> */}
       </div>
       <div className="navContainer__right">
         {!user ? (
@@ -88,10 +96,16 @@ function Navbar() {
           <div className="navContainer__options">
             <span>Hello, {user.name.split(" ")[0]}</span>
             <div className="navContainer__selector">
-              <div className="navContainer__opt">
+              <NavLink
+                to={
+                  user.role === "admin" ? "/admin/dashboard" : "/user/history"
+                }
+                className="navContainer__opt"
+                activeClassName="select_active"
+              >
                 <Dashboard className="navContainer__icon" />
                 Dashboard
-              </div>
+              </NavLink>
               <div className="navContainer__opt" onClick={handleLogout}>
                 <FontAwesomeIcon
                   className="navContainer__icon"
@@ -121,7 +135,7 @@ function Navbar() {
           </IconButton>
         </NavLink>
       </div>
-    </div>
+    </nav>
   );
 }
 

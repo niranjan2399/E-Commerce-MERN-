@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./app.scss";
 import {
   BrowserRouter as Router,
@@ -10,7 +10,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { auth } from "./firebase";
 import { useDispatch, useSelector } from "react-redux";
-import { currentUser, currentAdmin } from "./utils/auth";
+import { currentUser } from "./utils/auth";
+import AdminRoute from "./components/routes/AdminRoute";
 
 import Home from "./pages/home/Home";
 import Login from "./pages/auth/login/Login";
@@ -18,12 +19,12 @@ import Register from "./pages/auth/register/Register";
 import RegisterComplete from "./pages/auth/registerComplete/RegisterComplete";
 import ForgotPassword from "./pages/auth/forgotPassword/ForgotPassword";
 import History from "./pages/user/history/History";
-import LoadingToRedirect from "./components/loadingToRedirect/LoadingToRedirect";
 import Password from "./pages/user/password/Password";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
+import UserRoute from "./components/routes/UserRoute";
+import Categories from "./pages/admin/categories/Categories";
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -50,21 +51,6 @@ function App() {
       unsubscribe();
     };
   }, [dispatch]);
-
-  useEffect(() => {
-    if (user) {
-      const isAdmin = async () => {
-        try {
-          await currentAdmin(user.token);
-          setIsAdmin(true);
-        } catch (err) {
-          console.log(err);
-          setIsAdmin(false);
-        }
-      };
-      isAdmin();
-    }
-  }, [user]);
 
   return (
     <Router>
@@ -93,23 +79,12 @@ function App() {
         />
 
         {/* user Routes */}
-        <Route
-          path="/user/history"
-          exact
-          render={() => (user ? <History /> : <LoadingToRedirect />)}
-        />
-        <Route
-          path="/user/password"
-          exact
-          render={() => (user ? <Password /> : <LoadingToRedirect />)}
-        />
+        <UserRoute path="/user/history" exact component={History} />
+        <UserRoute path="/user/password" exact component={Password} />
 
         {/* admin Routes */}
-        <Route
-          path="/admin/dashboard"
-          exact
-          render={() => (isAdmin ? <Dashboard /> : <LoadingToRedirect />)}
-        />
+        <AdminRoute exact path="/admin/dashboard" component={Dashboard} />
+        <AdminRoute exact path="/admin/categories" component={Categories} />
       </Switch>
     </Router>
   );

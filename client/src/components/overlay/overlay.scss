@@ -1,0 +1,59 @@
+.overlay {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(2px) contrast(0.5);
+  transform: scale(0);
+  z-index: 1;
+
+  &.reveal {
+    transform: scaleY(0.01) scaleX(0);
+    animation: unfoldIn 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+
+    &.hide {
+      transform: scale(1);
+      animation: unfoldOut 1s 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    }
+  }
+}
+
+@keyframes unfoldIn {
+  0% {
+    transform: scaleY(0.005) scaleX(0);
+  }
+  50% {
+    transform: scaleY(0.005) scaleX(1);
+  }
+  100% {
+    transform: scaleY(1) scaleX(1);
+  }
+}
+
+@keyframes unfoldOut {
+  0% {
+    transform: scaleY(1) scaleX(1);
+  }
+  50% {
+    transform: scaleY(0.005) scaleX(1);
+  }
+  100% {
+    transform: scaleY(0.005) scaleX(0);
+  }
+}
+
+@keyframes zoomIn {
+  0% {
+    transform: translateX(-50%) scale(0);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes zoomOut {
+  0% {
+    transform: translateX(-50%) scale(1);
+  }
+  100% {
+    transform: translateX(-50%) scale(0);
+  }
+}

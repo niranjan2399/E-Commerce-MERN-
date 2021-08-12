@@ -47,7 +47,7 @@ const RegisterCompleteForm = () => {
 
           // redux store
           const resApi = await createUserOrUpdate(tokenId.token, {
-            name: `${firstName} ${lastName}`,
+            name: `${firstName.trim()} ${lastName.trim()}`,
           });
 
           dispatch({

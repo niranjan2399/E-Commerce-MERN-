@@ -1,0 +1,48 @@
+.categoryContainer__mid {
+  display: flex;
+  align-items: center;
+  padding-inline: 1rem;
+  max-width: 45%;
+  margin-inline: auto;
+  margin-block: 1.35rem;
+  border-radius: 2rem;
+  border: 1.5px solid #8167a9;
+  color: #8167a9;
+
+  input {
+    display: block;
+    flex: 1;
+    padding-block: 0.65rem;
+    padding-inline: 0.25rem;
+    border: none;
+    color: #333;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.navContainer__search {
+  display: flex;
+  color: #212112;
+  margin-left: 1.25rem;
+
+  input {
+    padding-block: 0.25rem;
+    margin-right: 0.5rem;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #212112;
+    color: #333;
+
+    &:focus {
+      outline: none;
+      border-bottom: 2px solid #777;
+
+      & + .search__icon {
+        color: #777;
+      }
+    }
+  }
+}
