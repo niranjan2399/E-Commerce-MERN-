@@ -1,19 +1,20 @@
 .subContainer {
   height: 0;
-  max-height: 5rem;
+  max-height: 10rem;
   overflow-y: auto;
   transition: all 200ms linear;
   background-color: #ddd;
   border-radius: 0.5rem;
   margin-inline: 2rem;
-  padding-inline: 1rem;
 
   .subContainer__main {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-inline: 1rem;
     padding-block: 0.25rem;
     font-size: 0.8rem;
+    border-bottom: 1px solid #eeeeee;
 
     &:hover {
       .subContainer__right {

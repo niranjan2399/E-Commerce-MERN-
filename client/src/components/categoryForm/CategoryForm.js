@@ -8,14 +8,7 @@ import "./categoryForm.scss";
 import { formHide } from "../../utils/animate";
 import { toast } from "react-toastify";
 
-function CategoryForm({
-  title,
-  type,
-  method,
-  overlayRef,
-  formRef,
-  ...props
-}) {
+function CategoryForm({ title, type, method, overlayRef, formRef, ...props }) {
   const [defaultValue, setDefaultValue] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const { user } = useSelector((state) => ({ ...state }));
@@ -23,12 +16,14 @@ function CategoryForm({
   useEffect(() => {
     if (props.objectid) {
       setDefaultValue(props.objectid);
+    } else if (props.parentid) {
+      setDefaultValue(props.parentid);
     }
 
     return () => {
       setDefaultValue("");
     };
-  }, [props.objectid]);
+  }, [props.objectid, props.parentid]);
 
   const handleNew = async (e) => {
     e.preventDefault();
@@ -40,9 +35,8 @@ function CategoryForm({
           return [...pre, res.data];
         });
         toast.success(`Category "${res.data.name}" is created`);
-        setCategoryName("");
       } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data);
       }
     } else {
       try {
@@ -54,38 +48,64 @@ function CategoryForm({
         props.function.setSubCategories((pre) => {
           return [...pre, res.data];
         });
+
+        toast.success(`SubCategory ${categoryName} created`);
       } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data);
       }
     }
     formHide(overlayRef, formRef);
+    setCategoryName("");
   };
 
   const handleChange = async (e) => {
     e.preventDefault();
     const slug = props.slug;
 
-    try {
-      const res = await updateCategory(slug, user.token, {
-        name: categoryName,
-      });
-
-      props.function.setCategories((pre) => {
-        const data = pre.filter((p) => {
-          return p.slug !== slug;
+    if (type !== "sub") {
+      try {
+        const res = await updateCategory(slug, user.token, {
+          name: categoryName,
         });
-        return [...data, res.data];
-      });
 
-      toast.success(`Category renamed to "${res.data.name}"`);
-      formHide(overlayRef, formRef);
-      setCategoryName("");
-    } catch (err) {
-      toast.error(err.message);
+        props.function.setCategories((pre) => {
+          const data = pre.filter((p) => {
+            return p.slug !== slug;
+          });
+          return [...data, res.data];
+        });
+
+        toast.success(`Category renamed to "${res.data.name}"`);
+      } catch (err) {
+        toast.error(err.response.data);
+      }
+    } else {
+      try {
+        const res = await updateSub(slug, user.token, {
+          name: categoryName,
+          parent: defaultValue,
+        });
+        console.log(res.data);
+
+        props.function.setSubCategories((sub) => {
+          const data = sub.filter((s) => {
+            return s.slug !== slug;
+          });
+          return [...data, res.data];
+        });
+
+        toast.success(`SubCategory Updated`);
+      } catch (err) {
+        toast.error(err.response.data);
+      }
     }
+    formHide(overlayRef, formRef);
+    setCategoryName("");
   };
 
-  const handleSelect = (e) => {};
+  const handleSelect = (e) => {
+    setDefaultValue(e.target.value);
+  };
 
   return (
     <div className="categoryForm__container">
@@ -104,7 +124,11 @@ function CategoryForm({
             <select value={defaultValue} onChange={handleSelect}>
               {props.categories.map((category) => {
                 return (
-                  <option value={category._id} key={category._id} disabled>
+                  <option
+                    value={category._id}
+                    key={category._id}
+                    {...(method === "new" && { disabled: true })}
+                  >
                     {category.name}
                   </option>
                 );

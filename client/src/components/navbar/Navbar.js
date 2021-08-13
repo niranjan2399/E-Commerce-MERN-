@@ -4,14 +4,7 @@ import { NavLink, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import firebase from "firebase";
 import { IconButton, Badge } from "@material-ui/core";
-import {
-  ShoppingCart,
-  Search,
-  Person,
-  PersonAdd,
-  Dashboard,
-} from "@material-ui/icons";
-
+import { ShoppingCart, Person, PersonAdd, Dashboard } from "@material-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import LocalSearch from "../LocalSearch/LocalSearch";

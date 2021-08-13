@@ -1,0 +1,8 @@
+.productContainer {
+  display: flex;
+
+  .productContainer__main {
+    display: flex;
+    width: calc(100% - 18rem);
+  }
+}

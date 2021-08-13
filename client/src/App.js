@@ -23,6 +23,8 @@ import Password from "./pages/user/password/Password";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import UserRoute from "./components/routes/UserRoute";
 import Categories from "./pages/admin/categories/Categories";
+import Products from "./pages/admin/products/Products";
+import NewProduct from "./pages/admin/newProduct/NewProduct";
 
 function App() {
   const dispatch = useDispatch();
@@ -85,6 +87,8 @@ function App() {
         {/* admin Routes */}
         <AdminRoute exact path="/admin/dashboard" component={Dashboard} />
         <AdminRoute exact path="/admin/categories" component={Categories} />
+        <AdminRoute exact path="/admin/products" component={Products} />
+        <AdminRoute exact path="/admin/products/new" component={NewProduct} />
       </Switch>
     </Router>
   );

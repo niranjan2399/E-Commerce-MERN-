@@ -58,7 +58,7 @@ const LoginForm = () => {
       });
       roleBasedRedirect(role);
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response.data);
       setLoading(false);
     }
   };
@@ -86,7 +86,7 @@ const LoginForm = () => {
 
       history.push("/");
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response.data);
     }
   };
 

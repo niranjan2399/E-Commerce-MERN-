@@ -20,7 +20,7 @@ function ForgotPassword() {
       toast.success("Check your email for password reset link");
       setEmail("");
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response.data);
       setWaiting(false);
     }
   };

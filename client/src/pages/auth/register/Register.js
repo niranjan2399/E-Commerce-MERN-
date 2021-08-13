@@ -30,7 +30,7 @@ const RegisterForm = () => {
       window.localStorage.setItem("registeredEmail", email);
       setEmail("");
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response.data);
     }
   };
 

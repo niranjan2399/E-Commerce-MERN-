@@ -3,7 +3,7 @@ import AdminSidebar from "../../../components/adminSidebar/AdminSidebar";
 import CategoryForm from "../../../components/categoryForm/CategoryForm";
 import Navbar from "../../../components/navbar/Navbar";
 import Overlay from "../../../components/overlay/Overlay";
-import { Add, Edit, Delete, Warning, ExpandMore } from "@material-ui/icons";
+import { Add, Edit, Delete, ExpandMore } from "@material-ui/icons";
 import { IconButton } from "@material-ui/core";
 import { getCategories, removeCategory } from "../../../utils/category";
 import "./categories.scss";
@@ -12,6 +12,7 @@ import LocalSearch from "../../../components/LocalSearch/LocalSearch";
 import { toast } from "react-toastify";
 import SubCategory from "../../../components/subcategory/SubCategory";
 import { getSubs } from "../../../utils/sub";
+import WarningDiv from "../../../components/warning/WarningDiv";
 
 function Categories() {
   const [subCategories, setSubCategories] = useState(null);
@@ -51,29 +52,41 @@ function Categories() {
   }, []);
 
   const handleViewForm = (e) => {
-    if (e.currentTarget.getAttribute("data-identifier") === "newCategory") {
+    const dataIdentifier = e.currentTarget.dataset.identifier;
+
+    if (dataIdentifier === "newCategory") {
       setFormProps({
         title: "Create New Category",
         type: "category",
         method: "new",
         function: { setCategories },
       });
-    } else if (e.currentTarget.getAttribute("data-identifier") === "sub") {
+    } else if (dataIdentifier === "sub") {
       setFormProps({
         title: "Create New Sub-Category",
         type: "sub",
         method: "new",
         function: { setSubCategories },
-        objectid: e.currentTarget.getAttribute("data-objectid"),
+        objectid: e.currentTarget.dataset.objectid,
         categories: categories,
+      });
+    } else if (dataIdentifier === "updateSub") {
+      setFormProps({
+        title: "Update Sub-Category",
+        type: "sub",
+        method: "update",
+        function: { setSubCategories },
+        categories: categories,
+        parentid: e.currentTarget.dataset.parentid,
+        slug: e.currentTarget.dataset.slug,
       });
     } else {
       setFormProps({
-        title: "Edit Category",
+        title: "Update Category",
         type: "category",
         method: "update",
         function: { setCategories },
-        slug: e.currentTarget.getAttribute("data-selector"),
+        slug: e.currentTarget.dataset.slug,
       });
     }
 
@@ -82,7 +95,7 @@ function Categories() {
   };
 
   const deleteCategory = async (e) => {
-    const slug = e.currentTarget.getAttribute("data-selector");
+    const slug = e.currentTarget.dataset.slug;
 
     try {
       await removeCategory(slug, user.token);
@@ -91,9 +104,9 @@ function Categories() {
         return pre.filter((p) => p.slug !== slug);
       });
 
-      toast.info("Category deleted");
+      toast.info("Category and SubCategories deleted");
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err.response.data);
     }
   };
 
@@ -177,7 +190,7 @@ function Categories() {
                             <IconButton
                               style={{ width: "1.75rem", height: "1.75rem" }}
                               onClick={handleViewForm}
-                              data-selector={category.slug}
+                              data-slug={category.slug}
                             >
                               <Edit
                                 style={{
@@ -189,7 +202,7 @@ function Categories() {
                             <IconButton
                               style={{ width: "1.75rem", height: "1.75rem" }}
                               onClick={deleteCategory}
-                              data-selector={category.slug}
+                              data-slug={category.slug}
                             >
                               <Delete
                                 style={{
@@ -204,15 +217,13 @@ function Categories() {
                           parent={category._id}
                           subCategories={subCategories}
                           setSubCategories={setSubCategories}
+                          handleViewForm={handleViewForm}
                         />
                       </div>
                     );
                   })
               ) : (
-                <div className="categoryContainer__warning">
-                  <Warning style={{ color: "yellow", marginRight: "1rem" }} />
-                  No result matches to your search
-                </div>
+                <WarningDiv message="No result matches to your search" />
               )}
             </div>
           )}

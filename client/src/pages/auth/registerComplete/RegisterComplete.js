@@ -65,7 +65,7 @@ const RegisterCompleteForm = () => {
           history.push("/");
         }
       } catch (err) {
-        toast.error(err.message);
+        toast.error(err.response.data);
       }
     } else {
       toast.error("Passwords don't match");
