@@ -5,6 +5,6 @@ exports.getUser = async (req, res) => {
     const user = await User.find({ email: req.params.email });
     res.json(user);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json("Can't fetch user details");
   }
 };
