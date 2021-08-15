@@ -3,7 +3,7 @@
 
   .categoryContainer__main {
     position: relative;
-    width: calc(100% - 18rem);
+    flex: 1;
     padding-block: 1rem;
     padding-inline: 1.5rem;
 
@@ -42,8 +42,23 @@
       button {
         display: flex;
         align-items: center;
-        padding: 0.35rem;
+        padding: 0.5rem 1rem;
         cursor: pointer;
+        border: 0.25rem solid #ddd;
+        background-color: transparent;
+        border-radius: 0.125rem;
+        font-size: 0.75rem;
+        height: 3.25rem;
+        cursor: pointer;
+        transition: all 200ms linear;
+
+        &:hover {
+          color: gray;
+          background-color: #8167a93b;
+          box-shadow: 0 0.5rem 0.5rem -0.4rem #8167a9;
+          border: 0.25rem solid #8167a9a9;
+          transform: translateY(-0.2rem);
+        }
       }
     }
 

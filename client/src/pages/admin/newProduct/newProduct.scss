@@ -4,6 +4,185 @@
   .npContainer__main {
     display: flex;
     flex-direction: column;
-    width: calc(100% - 18rem);
+    flex: 1;
+    padding-block: 1rem;
+    padding-inline: 1.5rem;
+
+    .npContainer__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eeeeee;
+      margin-bottom: 1.25rem;
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .npContainer__addImage {
+        label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 9rem;
+          height: 3.25rem;
+          border: 0.25rem solid #ddd;
+          border-radius: 0.125rem;
+          font-size: 0.75rem;
+          cursor: pointer;
+          padding: 0.65rem 1rem;
+          transition: all 200ms linear;
+
+          &:hover {
+            color: gray;
+            background-color: #8167a93b;
+            box-shadow: 0 0.5rem 0.5rem -0.4rem #8167a9;
+            border: 0.25rem solid #8167a9a9;
+            transform: translateY(-0.2rem);
+          }
+        }
+      }
+    }
+
+    .npContainer__bottom {
+      padding-inline: 1rem;
+
+      .npContainer__imageDiv {
+        display: flex;
+        align-items: center;
+        height: fit-content;
+        max-height: 8.25rem;
+        padding: 0.75rem;
+        background-color: #eeeeee;
+        border-radius: 0.125rem;
+        margin-bottom: 1rem;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        .npContainer__imagePreview {
+          position: relative;
+          height: 6.25rem;
+          width: fit-content;
+          margin-right: 0.9rem;
+          transition: all 200ms linear;
+
+          &:last-child {
+            margin-right: 0;
+          }
+
+          img {
+            object-fit: contain;
+            height: 100%;
+          }
+
+          &--info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            font-size: 0.75rem;
+            background-color: #332b0007;
+          }
+        }
+
+        .npContainer__delete {
+          position: absolute;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 1.125rem;
+          height: 1.125rem;
+          top: -0.5rem;
+          right: -0.5rem;
+          border-radius: 1rem;
+          background-color: #f50057;
+          transition: all 200ms linear;
+
+          &:hover {
+            background-color: black;
+            color: red;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .npContainer__form {
+        label {
+          display: block;
+          font-size: 0.75rem;
+          color: #222f3e;
+          margin-bottom: 0.35rem;
+        }
+
+        input,
+        textarea {
+          width: 100%;
+          padding-inline: 0.5rem;
+          padding-block: 0.5rem;
+          border: 0.125rem solid #ddd;
+          border-radius: 0.25rem;
+          margin-bottom: 1rem;
+          resize: none;
+
+          &:focus {
+            outline: none;
+            border: 0.125rem solid #8167a9;
+            box-shadow: 0 0 0.5rem #8167a981;
+          }
+        }
+
+        button {
+          position: relative;
+          display: block;
+          margin-inline: auto;
+          padding: 0.75rem 3rem;
+          cursor: pointer;
+          border: none;
+          color: white;
+          background-color: transparent;
+          transition: all 200ms linear;
+          font-size: 0.75rem;
+          margin-bottom: 3rem;
+
+          &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #8167a9;
+            transition: all 0.3s;
+          }
+          &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0;
+            transition: all 0.3s;
+            border: 1px solid #8167a9;
+            transform: scale(1.2, 1.2);
+          }
+          &:hover {
+            color: #8167a9;
+            &::before {
+              opacity: 0;
+              transform: scale(0.5, 0.5);
+            }
+            &::after {
+              opacity: 1;
+              transform: scale(1, 1);
+            }
+          }
+        }
+      }
+    }
   }
 }

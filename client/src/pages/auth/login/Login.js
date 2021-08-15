@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
-import firebase from "firebase";
+import firebase from "firebase/app";
 import { auth, googleAuthProvider } from "../../../firebase";
 import { useHistory, Link } from "react-router-dom";
 import { toast } from "react-toastify";

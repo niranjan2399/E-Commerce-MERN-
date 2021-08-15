@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./navbar.scss";
 import { NavLink, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import firebase from "firebase";
+import firebase from "firebase/app";
 import { IconButton, Badge } from "@material-ui/core";
 import { ShoppingCart, Person, PersonAdd, Dashboard } from "@material-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
