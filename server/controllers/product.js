@@ -45,3 +45,64 @@ exports.read = async (req, res) => {
     res.status(400).json("Can't read Product");
   }
 };
+
+exports.update = async (req, res) => {
+  try {
+    req.body.slug = slugify(req.body.title);
+    const updatedProduct = await Product.findOneAndUpdate(
+      { slug: req.params.slug },
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    res.json(updatedProduct);
+  } catch (err) {
+    res.status(400).json("Can't Update Product");
+  }
+};
+
+// WITHOUT PAGINATION
+// exports.listAccordingly = async (req, res) => {
+//   try {
+//     // created/updatedAt,desc/asc, no
+//     const { sort, order, limit } = req.body;
+//     const data = await Product.find({})
+//       .populate("category")
+//       .populate("subs")
+//       .sort([[sort, order]])
+//       .limit(limit);
+//     res.json(data);
+//   } catch (err) {
+//     res.status(400).json(err);
+//   }
+// };
+
+// WITH PAGINATION
+exports.listAccordingly = async (req, res) => {
+  const { sort, order, page } = req.body;
+  const currentPage = page || 1;
+  const perPage = 4;
+
+  try {
+    // created/updatedAt,desc/asc, no
+    const data = await Product.find({})
+      .skip((currentPage - 1) * perPage)
+      .populate("category")
+      .populate("subs")
+      .sort([[sort, order]])
+      .limit(perPage);
+    res.json(data);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.productsCount = async (req, res) => {
+  try {
+    const count = await Product.find({}).estimatedDocumentCount();
+    res.json(count);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
