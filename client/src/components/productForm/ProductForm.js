@@ -1,16 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import CustomSelect from "../customSelect/CustomSelect";
 
-function ProductForm({ values, handleSubmit, handleChange }) {
+function ProductForm({ values, handleSubmit, handleChange, setValues }) {
   let {
     title,
     description,
     price,
     categories,
+    shipping,
     quantity,
     colors,
     subListAll,
     sizes,
   } = values;
+  const [shippingValue, setShippingValue] = useState(values.shipping);
+
+  const handleCustomSelect = (e) => {
+    setShippingValue(e.currentTarget.dataset.value);
+    setValues({
+      ...values,
+      [e.currentTarget.dataset.name]: e.currentTarget.dataset.value,
+    });
+  };
 
   return (
     <form onSubmit={handleSubmit} className="npContainer__form">
@@ -34,13 +45,21 @@ function ProductForm({ values, handleSubmit, handleChange }) {
       <label htmlFor="price">Price</label>
       <input type="number" name="price" value={price} onChange={handleChange} />
       <label htmlFor="shipping">Shipping</label>
-      <select name="shipping" value="" onChange={handleChange}>
+      {/* <select name="shipping" value={values.shipping} onChange={handleChange}>
         <option disabled value="" hidden>
           Please Select
         </option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
-      </select>
+      </select> */}
+      <CustomSelect
+        options={[
+          { value: "Yes", name: "shipping" },
+          { value: "No", name: "shipping" },
+        ]}
+        handleCustomSelect={handleCustomSelect}
+        value={shippingValue}
+      />
       <label htmlFor="quantity">Quantity</label>
       <input
         type="number"
@@ -52,6 +71,7 @@ function ProductForm({ values, handleSubmit, handleChange }) {
       <select
         name="color"
         multiple
+        value={values.color}
         onChange={handleChange}
         required
         data-identifier="multipleColor"
@@ -69,6 +89,7 @@ function ProductForm({ values, handleSubmit, handleChange }) {
       <select
         name="size"
         multiple
+        value={values.size}
         onChange={handleChange}
         required
         data-identifier="multipleSize"
@@ -83,7 +104,7 @@ function ProductForm({ values, handleSubmit, handleChange }) {
         })}
       </select>
       <label htmlFor="category">Category</label>
-      <select name="category" value="" onChange={handleChange}>
+      <select name="category" value={values.category} onChange={handleChange}>
         <option hidden disabled value="">
           Please Select
         </option>
@@ -101,6 +122,7 @@ function ProductForm({ values, handleSubmit, handleChange }) {
           <label htmlFor="subs">Sub Category</label>
           <select
             name="subs"
+            value={values.subs}
             className="npContainer__subs"
             multiple
             onChange={handleChange}

@@ -1,6 +1,8 @@
 .csContainer {
+  position: relative;
   width: 100%;
   height: fit-content;
+  margin-bottom: 1rem;
 
   &:focus > .csContainer__labelWrapper {
     border-bottom: 0.2rem solid #8167a9;
@@ -22,6 +24,18 @@
     padding-left: 0.5rem;
     color: black;
     cursor: pointer;
+
+    &.show {
+      .icon {
+        transform: rotateX(180deg);
+      }
+
+      & + .csContainer__options {
+        margin-top: 0.25rem;
+        height: fit-content;
+        opacity: 1;
+      }
+    }
   }
 
   .csContainer__labelRight {
@@ -43,8 +57,10 @@
   }
 
   .csContainer__options {
+    // position: absolute;
     display: flex;
     flex-direction: column;
+    width: 100%;
     list-style: none;
     border-radius: 0.125rem;
     background-color: lighten(#485460, 2);
@@ -54,19 +70,23 @@
     opacity: 0;
     transition: all 200ms linear;
 
-    &.show {
-      margin-top: 0.25rem;
-      height: fit-content;
-      opacity: 1;
-    }
-
     .csContainer__option {
+      display: flex;
+      align-items: center;
       border-radius: 0.125rem;
       padding: 0.35rem 0.5rem;
       font-size: 0.8rem;
       font-weight: 400;
       color: white;
       box-shadow: 0 -1px 0 darken(#485460, 5), inset 0 1px 0 lighten(#485460, 5);
+      transition: all 200ms linear;
+
+      .csContainer__check {
+        opacity: 0;
+        font-size: 1rem;
+        margin-left: 0.5rem;
+        transition: all 200ms linear;
+      }
 
       &:not(:last-child) {
         border-bottom: 0.125rem solid #485460;
@@ -79,6 +99,10 @@
 
       &.selected {
         background-color: #8167a9;
+
+        .csContainer__check {
+          opacity: 1;
+        }
       }
     }
   }

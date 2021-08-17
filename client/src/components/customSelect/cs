@@ -1,0 +1,36 @@
+import React, { useEffect, useState } from "react";
+import Select from "./Select";
+import "./customSelect.scss";
+
+function CustomSelect() {
+  const [select, setSelect] = useState();
+
+  useEffect(() => {
+    (() => {
+      const select = document.querySelectorAll(".customSelect");
+
+      select.forEach((element) => {
+        new Select(element);
+      });
+    })();
+  }, []);
+
+  const handleChange = (e) => {
+    setSelect(e.target.value);
+    console.log(select);
+  };
+
+  return (
+    <select value={select} className="customSelect" onChange={handleChange}>
+      <option value="" hidden>
+        Please Select
+      </option>
+      <option value="niranjan">Niranjan</option>
+      <option value="basant">Basant</option>
+      <option value="siddha">Siddha</option>
+      <option value="pooja">Pooja</option>
+    </select>
+  );
+}
+
+export default CustomSelect;

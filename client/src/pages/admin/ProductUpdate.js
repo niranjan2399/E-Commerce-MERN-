@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import AdminSidebar from "../../../components/adminSidebar/AdminSidebar";
-import Navbar from "../../../components/navbar/Navbar";
 import { useSelector } from "react-redux";
-import { createProduct } from "../../../utils/product";
-import "./newProduct.scss";
+import { getCategories } from "../../utils/category";
+import { getForCategory } from "../../utils/sub";
+import { getProduct, updateProduct } from "../../utils/product";
 import { toast } from "react-toastify";
-import ProductForm from "../../../components/productForm/ProductForm";
-import { getCategories } from "../../../utils/category";
-import { getForCategory } from "../../../utils/sub";
-import FileUpload from "../../../components/productForm/FileUpload";
 import { Clear } from "@material-ui/icons";
-import axios from "../../../axios";
+import axios from "../../axios";
+import { useParams } from "react-router";
+
+import AdminSidebar from "../../components/adminSidebar/AdminSidebar";
+import Navbar from "../../components/navbar/Navbar";
+import ProductForm from "../../components/productForm/ProductForm";
+import FileUpload from "../../components/productForm/FileUpload";
 
 const initialValues = {
   title: "",
@@ -31,10 +32,21 @@ const initialValues = {
   sizes: ["XS", "S", "M", "L", "XL", "XXL"],
 };
 
-function NewProduct() {
-  const { user } = useSelector((state) => ({ ...state }));
+function ProductUpdate() {
   const [values, setValues] = useState(initialValues);
+  const { user } = useSelector((state) => ({ ...state }));
   const [loading, setLoading] = useState(false);
+  const slug = useParams().slug;
+
+  useEffect(() => {
+    (async () => {
+      const res = await getProduct(slug);
+
+      setValues((val) => {
+        return { ...val, ...res.data };
+      });
+    })();
+  }, [slug]);
 
   useEffect(() => {
     (async () => {
@@ -52,25 +64,8 @@ function NewProduct() {
         setValues((pre) => {
           return { ...pre, subListAll: res.data };
         });
-
-        document
-          .querySelector(".npContainer__subs")
-          .scrollIntoView({ behavior: "smooth" });
       })();
   }, [values.category]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      await createProduct(values, user.token);
-
-      toast.success("Product Created");
-      window.history.back();
-    } catch (err) {
-      toast.error(err.response.data);
-    }
-  };
 
   const handleChange = (e) => {
     const newValues = [];
@@ -92,6 +87,19 @@ function NewProduct() {
       setValues({ ...values, subs: newValues });
     } else {
       setValues({ ...values, [e.target.name]: e.target.value });
+    }
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    try {
+      await updateProduct(values.slug, values, user.token);
+
+      toast.success("Product Updated");
+      window.history.back();
+    } catch (err) {
+      toast.error(err.response.data);
     }
   };
 
@@ -125,7 +133,7 @@ function NewProduct() {
         <AdminSidebar />
         <div className="npContainer__main">
           <div className="npContainer__top">
-            <h2>New Product</h2>
+            <h2>Update Product</h2>
             <FileUpload
               values={values}
               setValues={setValues}
@@ -155,15 +163,14 @@ function NewProduct() {
                 })
               ) : (
                 <div className="npContainer__imagePreview npContainer__imagePreview--info">
-                  Please select product images to preview
+                  No Images Present to Preview
                 </div>
               )}
             </div>
             <ProductForm
               values={values}
               handleChange={handleChange}
-              handleSubmit={handleSubmit}
-              setValues={setValues}
+              handleSubmit={handleUpdate}
             />
           </div>
         </div>
@@ -172,4 +179,4 @@ function NewProduct() {
   );
 }
 
-export default NewProduct;
+export default ProductUpdate;

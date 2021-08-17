@@ -1,0 +1,93 @@
+.homeContainer {
+  display: flex;
+  .homeContainer__main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    // width: calc(100% - 18rem);
+
+    .homeContainer__section {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 95vw;
+      padding: 0.5rem 1rem 0 1rem;
+      margin-inline: auto;
+      margin-top: 1.25rem;
+      border-radius: 0.125rem;
+      border: 1px solid #ddd;
+      overflow: hidden;
+
+      &:hover {
+        .homeContainer__sectionBottom .homeContainer__scrollButtons {
+          opacity: 0.6;
+
+          &:first-child {
+            transform: translateY(-50%) rotateY(0deg);
+          }
+
+          &:last-child {
+            transform: translateY(-50%) rotateY(0deg);
+          }
+        }
+      }
+
+      .homeContainer__sectionTop {
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        color: #393c45;
+      }
+
+      .homeContainer__sectionBottom {
+        display: flex;
+        overflow-x: scroll;
+        width: 100%;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        .homeContainer__sectionWrapper {
+          display: flex;
+        }
+
+        .homeContainer__scrollButtons {
+          position: absolute;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 2.5em;
+          height: 4rem;
+          background-color: #eeeeee;
+          top: 50%;
+          z-index: 1;
+          box-shadow: 0 0 0.25rem rgba(black, 5);
+          opacity: 0;
+          cursor: pointer;
+          transition: all 200ms linear;
+
+          &:first-child {
+            left: 0;
+            border-top-right-radius: 0.125rem;
+            border-bottom-right-radius: 0.125rem;
+            transform-origin: left;
+            transform: translateY(-50%) rotateY(180deg);
+          }
+
+          &:last-child {
+            right: 0;
+            transform-origin: right;
+            border-top-left-radius: 0.125rem;
+            border-bottom-left-radius: 0.125rem;
+            transform: translateY(-50%) rotateY(180deg);
+          }
+
+          .icons {
+            font-size: 2.75rem;
+            color: #393c45;
+          }
+        }
+      }
+    }
+  }
+}

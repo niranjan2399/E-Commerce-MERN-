@@ -16,8 +16,8 @@ function FileUpload({ values, setValues, loading, setLoading }) {
       for (let i = 0; i < files.length; i++) {
         Resizer.imageFileResizer(
           files[i],
-          720,
-          720,
+          1024,
+          1024,
           "JPEG",
           100,
           0,
@@ -62,6 +62,7 @@ function FileUpload({ values, setValues, loading, setLoading }) {
           name="productImages"
           accept="images/*"
           multiple
+          required
           onChange={fileUploadAndResize}
           hidden
         />

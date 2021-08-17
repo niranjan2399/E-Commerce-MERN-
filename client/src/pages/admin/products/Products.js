@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Navbar from "../../../components/navbar/Navbar";
 import AdminSidebar from "../../../components/adminSidebar/AdminSidebar";
 import "./products.scss";
-// import CustomSelect from "../../../components/customSelect/CustomSelect";
 import ProductCard from "../../../components/productCard/ProductCard";
 import { listProducts } from "../../../utils/product";
 
@@ -44,7 +43,6 @@ function Products() {
                 );
               })}
           </div>
-          {/* <CustomSelect /> */}
         </div>
       </div>
     </>

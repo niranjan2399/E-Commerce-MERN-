@@ -25,6 +25,7 @@ import UserRoute from "./components/routes/UserRoute";
 import Categories from "./pages/admin/categories/Categories";
 import Products from "./pages/admin/products/Products";
 import NewProduct from "./pages/admin/newProduct/NewProduct";
+import ProductUpdate from "./pages/admin/ProductUpdate";
 
 function App() {
   const dispatch = useDispatch();
@@ -89,6 +90,7 @@ function App() {
         <AdminRoute exact path="/admin/categories" component={Categories} />
         <AdminRoute exact path="/admin/products" component={Products} />
         <AdminRoute exact path="/admin/products/new" component={NewProduct} />
+        <AdminRoute exact path="/admin/products/update/:slug" component={ProductUpdate} />
       </Switch>
     </Router>
   );

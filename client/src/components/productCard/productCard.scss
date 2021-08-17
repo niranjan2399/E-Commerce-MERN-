@@ -1,21 +1,25 @@
 .product {
   position: relative;
   perspective: 50rem;
-  width: 12rem;
-  height: 17.5rem;
+  width: 13.5rem;
+  height: 19.5rem;
   transform-style: preserve-3d;
   transition: transform 5s;
   // float: left;
-  margin-right: 1.5rem;
-  margin-bottom: 1.5rem;
-  transition: width 500ms ease-in-out;
+  margin-right: 1rem;
+  margin-block: 0.75rem;
+  transition: all 200ms ease-in-out;
+
+  &:hover {
+    transform: scale(1.03);
+  }
 
   .product__button {
     display: block;
     width: 45%;
-    height: 2.125rem;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
+    height: 2rem;
     text-transform: uppercase;
     background-color: transparent;
     color: #393c45;
@@ -45,8 +49,16 @@
           opacity: 0.6;
         }
 
+        .product__overlayButtons {
+          opacity: 1;
+        }
+
         .product__statsContainer {
           bottom: 0;
+        }
+
+        .product__statsBottom--home {
+          bottom: 0 !important;
         }
       }
     }
@@ -60,6 +72,9 @@
       }
 
       img {
+        object-fit: cover;
+        object-position: center;
+        min-height: 100%;
         width: 100%;
       }
 
@@ -71,28 +86,107 @@
         transition: all 200ms ease-out;
       }
 
-      // .product__button {
-      //   position: absolute;
-      //   bottom: 1rem;
-      // }
+      .product__overlayButtons {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        top: 17%;
+        width: 100%;
+        opacity: 0;
+        transition: all 200ms linear;
+
+        .product__button {
+          padding-inline: 0.5rem;
+          width: 50%;
+          color: white;
+          font-size: 0.65rem;
+          font-weight: 600;
+          border: 0.1rem solid white;
+
+          &:hover {
+            background-color: white;
+            color: #8167a9;
+          }
+
+          &:not(:first-child) {
+            margin-top: 0.5rem;
+          }
+        }
+      }
 
       .product__statsContainer {
         position: absolute;
-        padding: 0.5rem 0.75rem;
+        padding: 0.5rem 1rem;
         width: 100%;
         background-color: white;
         bottom: -3rem;
         transition: all 200ms ease-out;
 
-        .product_name {
-          font-size: 0.8rem;
-          color: #393c45;
-          font-weight: 700;
+        &.product__statsBottom--home {
+          bottom: -5.5rem;
+        }
+
+        .product__statsTop {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          .product_name {
+            font-size: 0.75rem;
+            color: #393c45;
+            font-weight: 700;
+            margin-top: 0.25rem;
+          }
+
+          span {
+            color: #8167a9;
+            font-weight: 600;
+          }
         }
 
         p {
           font-size: 0.7rem;
           color: #b4b4b6;
+        }
+
+        .product__statsBottom {
+          strong {
+            display: block;
+            font-size: 0.7rem;
+            color: #393c45;
+            margin-bottom: -0.25rem;
+            margin-top: 0.5rem;
+          }
+
+          span {
+            font-size: 0.68rem;
+            color: #b4b4b6;
+          }
+
+          .product__colors {
+            margin-top: 0.25rem;
+
+            & div {
+              margin-top: 3px;
+              width: 13px;
+              height: 13px;
+              margin-right: 5px;
+              float: left;
+            }
+            & div span {
+              width: 13px;
+              height: 13px;
+              display: block;
+              border-radius: 50%;
+            }
+            & div span:hover {
+              width: 15px;
+              height: 15px;
+              margin: -1px 0 0 -1px;
+            }
+          }
         }
 
         .product__adminOptions {
@@ -106,24 +200,29 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 2.125rem;
+            height: 2rem;
             width: 45%;
-            font-size: 0.75rem;
-            font-weight: 700;
             text-transform: uppercase;
             text-decoration: none;
-            color: #393c45;
             border: 0.125rem solid #393c45;
             transition: all 200ms linear;
 
             &:hover {
-              color: #8167a9;
               border: 0.125rem solid #8167a9;
+
+              span {
+                color: #8167a9;
+              }
             }
 
             span {
+              font-family: "Open Sans", sans-serif;
+              font-size: 0.7rem;
+              font-weight: 700;
               margin-block: auto;
               text-align: center;
+              color: #393c45;
+              transition: all 200ms linear;
             }
           }
         }
@@ -133,6 +232,7 @@
     .product__back {
       display: none;
       transform: rotateY(180deg);
+      transition: all 200ms linear;
     }
   }
 }
