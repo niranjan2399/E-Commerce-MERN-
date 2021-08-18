@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 import firebase from "firebase/app";
 import { auth, googleAuthProvider } from "../../../firebase";
 import { useHistory, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createUserOrUpdate, currentUser } from "../../../utils/auth";
 import { CircularProgress } from "@material-ui/core";
 import AuthWrapper from "../../../components/authWrapper/AuthWrapper";
@@ -20,14 +20,28 @@ const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { user } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
   const history = useHistory();
+  let intended = history.location.state;
+
+  useEffect(() => {
+    if (intended) {
+      return;
+    } else {
+      if (user) history.push("/");
+    }
+  }, [user, intended, history]);
 
   const roleBasedRedirect = (role) => {
-    if (role === "admin") {
-      history.push("/admin/dashboard");
+    if (intended) {
+      history.push(intended.from);
     } else {
-      history.push("/user/history");
+      if (role === "admin") {
+        history.push("/admin/dashboard");
+      } else {
+        history.push("/user/history");
+      }
     }
   };
 
@@ -58,8 +72,8 @@ const LoginForm = () => {
       });
       roleBasedRedirect(role);
     } catch (err) {
-      toast.error(err.response.data);
       setLoading(false);
+      toast.error(err.response.data);
     }
   };
 

@@ -1,0 +1,174 @@
+.pdContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  .pdContainer__main {
+    position: relative;
+    display: flex;
+    width: 100vw;
+
+    .pdContainer__ratingModel {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      width: 30rem;
+      height: 12rem;
+      background-color: #eeeeee;
+      border-radius: 0.125rem;
+      padding: 0.5rem 0.5rem 1.5rem 1.5rem;
+      top: 10rem;
+      left: 50%;
+      z-index: 2;
+      opacity: 0;
+      transform: translateX(-50%) scale(0.5);
+      transition: all 200ms ease-in;
+
+      &.show {
+        transform: translateX(-50%) scale(1);
+        opacity: 1;
+      }
+
+      .pdContainer__ratingTop {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .pdContainer__ratingMid {
+        padding-top: 0.75rem;
+        margin: auto;
+        flex: 1;
+      }
+
+      .pdContainer__ratingButtons {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-right: 1rem;
+
+        button {
+          width: 5rem;
+          height: 2rem;
+          cursor: pointer;
+          background-color: white;
+          border-radius: 0.125rem;
+          border: 1px solid #ddd;
+
+          &:last-child {
+            margin-left: 1rem;
+          }
+        }
+      }
+    }
+
+    .pdContainer__carousel {
+      position: sticky;
+      top: 4.5rem;
+      width: fit-content;
+      padding: 1.5rem;
+      border-right: 1px solid #eeeeee;
+      height: 100%;
+    }
+
+    .pdContainer__detailContainer {
+      padding: 1.5rem;
+      width: 100%;
+
+      .pdContainer__title {
+        font-size: 1.5rem;
+        padding: 0.5rem;
+        text-align: center;
+        border-bottom: 1px solid #eeeeee;
+        box-shadow: 0 0.25rem 1rem #eeeeee;
+      }
+
+      .pdContainer__details {
+        display: flex;
+        padding: 1rem 0 1rem 1rem;
+        margin-top: 1rem;
+
+        .pdContainer__detailsLeft {
+          width: 70%;
+
+          .pdContainer__info {
+            list-style: none;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid #eeeeee;
+            width: 100%;
+
+            li {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              font-size: 0.8rem;
+              padding: 1rem;
+
+              div {
+                & div {
+                  margin-top: 3px;
+                  width: 13px;
+                  height: 13px;
+                  margin-right: 5px;
+                  float: left;
+                }
+                & div span {
+                  width: 13px;
+                  height: 13px;
+                  display: block;
+                  border-radius: 50%;
+                }
+                & div span:hover {
+                  width: 15px;
+                  height: 15px;
+                  margin: -1px 0 0 -1px;
+                }
+              }
+            }
+          }
+        }
+
+        .pdContainer__buttonDiv {
+          display: flex;
+          flex-direction: column;
+          width: 30%;
+
+          button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-inline: auto;
+            font-size: 0.8rem;
+            font-weight: 600;
+            width: 11rem;
+            padding: 0.5rem 0;
+            border: 0.1rem solid #393c45;
+            color: #393c45;
+            background-color: transparent;
+            cursor: pointer;
+            transition: all 200ms linear;
+
+            &:not(:last-child) {
+              margin-bottom: 1rem;
+            }
+
+            &:hover {
+              transform: translateY(-0.2rem);
+              box-shadow: 0 0.5rem 0.5rem -0.4rem #8167a9;
+              border: 0.125rem solid #8167a9;
+              color: #8167a9;
+            }
+
+            .icon {
+              margin-right: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

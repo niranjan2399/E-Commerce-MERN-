@@ -13,6 +13,7 @@ const {
   update,
   listAccordingly,
   productsCount,
+  productStar,
 } = require("../controllers/product");
 
 router.post("/product", authCheck, adminCheck, create);
@@ -20,7 +21,10 @@ router.get("/product/:count", list);
 router.get("/products/total", productsCount);
 router.delete("/product/:slug", authCheck, adminCheck, remove);
 router.put("/product/:slug", authCheck, adminCheck, update);
-router.get("/product/update/:slug", read);
+router.get("/product/read/:slug", read);
 router.post("/products", listAccordingly);
+
+// rating
+router.put("/product/star/:productId", authCheck, productStar);
 
 module.exports = router;

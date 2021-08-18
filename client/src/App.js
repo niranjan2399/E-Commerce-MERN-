@@ -26,6 +26,7 @@ import Categories from "./pages/admin/categories/Categories";
 import Products from "./pages/admin/products/Products";
 import NewProduct from "./pages/admin/newProduct/NewProduct";
 import ProductUpdate from "./pages/admin/ProductUpdate";
+import Product from "./pages/product/Product";
 
 function App() {
   const dispatch = useDispatch();
@@ -60,11 +61,7 @@ function App() {
       <ToastContainer />
       <Switch>
         <Route path="/" exact render={() => <Home />} />
-        <Route
-          path="/login"
-          exact
-          render={() => (user ? <Redirect to="/" /> : <Login />)}
-        />
+        <Route path="/login" exact render={() => <Login />} />
         <Route
           path="/register"
           exact
@@ -80,6 +77,7 @@ function App() {
           exact
           render={() => (user ? <Redirect to="/" /> : <ForgotPassword />)}
         />
+        <Route path="/product/:slug" exact render={() => <Product />} />
 
         {/* user Routes */}
         <UserRoute path="/user/history" exact component={History} />
@@ -90,7 +88,11 @@ function App() {
         <AdminRoute exact path="/admin/categories" component={Categories} />
         <AdminRoute exact path="/admin/products" component={Products} />
         <AdminRoute exact path="/admin/products/new" component={NewProduct} />
-        <AdminRoute exact path="/admin/products/update/:slug" component={ProductUpdate} />
+        <AdminRoute
+          exact
+          path="/admin/products/update/:slug"
+          component={ProductUpdate}
+        />
       </Switch>
     </Router>
   );

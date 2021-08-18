@@ -75,17 +75,20 @@ function ProductCard({ product, setProducts = null }) {
                   <span>{product.size.join(", ")}</span>
                   <strong>COLORS</strong>
                   <div className="product__colors">
-                    {product.color.map((clr) => {
-                      return (
-                        <div key={clr}>
-                          <span
-                            style={{
-                              backgroundColor: `${colors[clr]}`,
-                            }}
-                          ></span>
-                        </div>
-                      );
-                    })}
+                    <div className='product__colorsWrapper'>
+                      {product.color.map((clr) => {
+                        return (
+                          <div key={clr}>
+                            <span
+                              style={{
+                                backgroundColor: `${colors[clr]}`,
+                              }}
+                            ></span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <Link className='product__details' to={`product/${product.slug}`}>Details</Link>
                   </div>
                 </>
               ) : (

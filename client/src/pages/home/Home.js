@@ -32,6 +32,7 @@ function Home() {
 
   const scroll = (e) => {
     // const section = e.currentTarget.dataset.section;
+
   };
 
   return (

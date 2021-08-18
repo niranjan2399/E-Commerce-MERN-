@@ -64,12 +64,12 @@ const productSchema = new mongoose.Schema(
         enum: ["XS", "S", "M", "L", "XL", "XXL"],
       },
     ],
-    // ratings: [
-    //   {
-    //     star: Number,
-    //     postedBy: { type: ObjectId, ref: "User" },
-    //   },
-    // ],
+    ratings: [
+      {
+        star: Number,
+        postedBy: { type: ObjectId, ref: "User" },
+      },
+    ],
   },
   {
     timestamps: true,

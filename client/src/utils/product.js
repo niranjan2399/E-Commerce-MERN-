@@ -9,7 +9,7 @@ export const createProduct = async (product, authtoken) => {
 };
 
 export const getProduct = async (slug) => {
-  return await axios.get(`/product/update/${slug}`);
+  return await axios.get(`/product/read/${slug}`);
 };
 
 export const removeProduct = async (slug, authtoken) => {
