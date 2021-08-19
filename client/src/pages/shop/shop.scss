@@ -1,0 +1,36 @@
+.shop {
+  display: flex;
+
+  .shop__left {
+    position: sticky;
+    width: 20rem;
+    height: 100vh;
+    top: 4.5rem;
+    padding: 0.5rem;
+    background: #485460;
+
+    .shop__filterHead {
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
+      color: white;
+      text-align: center;
+      font-weight: 600;
+      border-bottom: 1px solid #eeeeee;
+    }
+  }
+
+  .shop__right {
+    display: flex;
+    margin-top: 0.5rem;
+    width: 100%;
+    justify-content: space-around;
+    flex-wrap: wrap;
+
+    .shop__warning {
+      margin-top: 2.5rem;
+      .warning {
+        padding-inline: 2rem;
+      }
+    }
+  }
+}

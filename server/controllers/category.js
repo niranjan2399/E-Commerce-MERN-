@@ -1,4 +1,5 @@
 const Category = require("../models/Category");
+const Product = require("../models/Product");
 const slugify = require("slugify");
 
 exports.create = async (req, res) => {
@@ -28,9 +29,10 @@ exports.list = async (req, res) => {
 exports.read = async (req, res) => {
   try {
     const category = await Category.find({ slug: req.params.slug });
-    res.json(category);
+    const products = await Product.find({ category });
+    res.json({ category, products });
   } catch (err) {
-    res.status(500).json("Can't find Category");
+    res.status(400).json("Can't find Category");
   }
 };
 

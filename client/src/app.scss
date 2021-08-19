@@ -46,3 +46,10 @@ input:-webkit-autofill:focus {
   background-color: #8167a9;
   border-radius: 0.5rem;
 }
+
+.averageRating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+}

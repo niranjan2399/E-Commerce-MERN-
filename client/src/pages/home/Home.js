@@ -6,20 +6,36 @@ import AdminSidebar from "../../components/adminSidebar/AdminSidebar";
 import "./home.scss";
 import ProductCard from "../../components/productCard/ProductCard";
 import { getAccordingly } from "../../utils/product";
-import {
-  NavigateBefore,
-  NavigateNext,
-} from "@material-ui/icons";
+import { NavigateBefore, NavigateNext } from "@material-ui/icons";
+import CategoryList from "../../components/category/CategoryList";
+import { getCategories } from "../../utils/category";
+import { getSubs } from "../../utils/sub";
 
 function Home() {
   const { user } = useSelector((state) => ({ ...state }));
   const [newProducts, setNewProducts] = useState(null);
   const [bestSellers, setBestSellers] = useState(null);
+  const [categories, setCategories] = useState(null);
+  const [subCategories, setSubCategories] = useState(null);
 
   useEffect(() => {
     (async () => {
       const res = await getAccordingly("createdAt", "desc", 4);
       setNewProducts(res.data);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const res = await getCategories();
+      setCategories(res.data);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const res = await getSubs();
+      setSubCategories(res.data);
     })();
   }, []);
 
@@ -32,7 +48,6 @@ function Home() {
 
   const scroll = (e) => {
     // const section = e.currentTarget.dataset.section;
-
   };
 
   return (
@@ -105,6 +120,18 @@ function Home() {
                   <NavigateNext className="icons" />
                 </div>
               </div>
+            </section>
+          )}
+          {categories && (
+            <section className="homeContainer__section">
+              <div className="homeContainer__sectionTop">Categories</div>
+              <CategoryList list={categories} to="category" />
+            </section>
+          )}
+          {subCategories && (
+            <section className="homeContainer__section">
+              <div className="homeContainer__sectionTop">SubCategories</div>
+              <CategoryList list={subCategories} to="subcategory" />
             </section>
           )}
         </div>

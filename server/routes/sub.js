@@ -18,7 +18,7 @@ const {
 
 router.post("/sub", authCheck, adminCheck, create);
 router.get("/sub", list);
-router.get("/sub/:slug", authCheck, read);
+router.get("/sub/:slug", read);
 router.put("/sub/:slug", authCheck, adminCheck, update);
 router.delete("/sub/:slug", authCheck, adminCheck, remove);
 router.get("/sub/category/:id", getForCategory);

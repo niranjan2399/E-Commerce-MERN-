@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Rating } from "@material-ui/lab";
 import { Box, CircularProgress, IconButton } from "@material-ui/core";
@@ -13,24 +13,41 @@ import ImageCarousel from "../../components/imageCarousel/ImageCarousel";
 import Navbar from "../../components/navbar/Navbar";
 import Overlay from "../../components/overlay/Overlay";
 import Tabs from "../../components/tabs/Tabs";
-import { getProduct } from "../../utils/product";
+import { getProduct, getRelated, setRatings } from "../../utils/product";
+import { toast } from "react-toastify";
+import { averageRating } from "../../utils/rating";
+import ProductCard from "../../components/productCard/ProductCard";
 import "./product.scss";
 
 function Product() {
+  const { user } = useSelector((state) => ({ ...state }));
   const [product, setProduct] = useState(null);
-  const [value, setValue] = useState(2);
+  const [related, setRelated] = useState(null);
+  const [value, setValue] = useState(0);
   const [hover, setHover] = useState(-1);
   const [showModel, setShowModel] = useState(false);
-  const { user } = useSelector((state) => ({ ...state }));
   const slug = useParams().slug;
   const history = useHistory();
 
   useEffect(() => {
     (async () => {
       const res = await getProduct(slug);
+      const relatedRes = await getRelated(res.data._id);
       setProduct(res.data);
+      setRelated(relatedRes.data);
     })();
+
+    return () => {
+      setProduct([]);
+      setRelated([]);
+    };
   }, [slug]);
+
+  useEffect(() => {
+    if (user && product && product.ratings.length > 0) {
+      setValue(product.ratings.find((obj) => obj.postedBy === user._id).star);
+    }
+  }, [user, product]);
 
   const colors = {
     Blue: "#6E8CD5",
@@ -65,7 +82,7 @@ function Product() {
     },
   ];
 
-  const handleRating = () => {
+  const handleRatingModal = () => {
     if (user) {
       setShowModel(true);
     } else {
@@ -76,6 +93,18 @@ function Product() {
         },
       });
     }
+  };
+
+  const handleStarValue = async (_, value) => {
+    setValue(value);
+  };
+
+  const submitStarRating = async () => {
+    await setRatings(value, product._id, user.token);
+    const res = await getProduct(slug);
+    setProduct(res.data);
+    setShowModel(false);
+    toast.success("Thanks for your review");
   };
 
   return (
@@ -102,7 +131,8 @@ function Product() {
                   value={value}
                   precision={0.5}
                   size="large"
-                  onChangeActive={(event, newHover) => {
+                  onChange={handleStarValue}
+                  onChangeActive={(_, newHover) => {
                     setHover(newHover);
                   }}
                 />
@@ -119,7 +149,7 @@ function Product() {
               </div>
               <div className="pdContainer__ratingButtons">
                 <button onClick={() => setShowModel(false)}>Cancel</button>
-                <button>Submit</button>
+                <button onClick={submitStarRating}>Submit</button>
               </div>
             </div>
             <div className="pdContainer__carousel">
@@ -127,6 +157,7 @@ function Product() {
             </div>
             <div className="pdContainer__detailContainer">
               <div className="pdContainer__title">{product.title}</div>
+              {product && product.ratings && averageRating(product)}
               <div className="pdContainer__details">
                 <div className="pdContainer__detailsLeft">
                   <Tabs product={product} />
@@ -135,7 +166,13 @@ function Product() {
                       Price<span>${product.price}</span>
                     </li>
                     <li>
-                      Category<span>{product.category.name}</span>
+                      Category
+                      <Link
+                        className="pdContainer__infoLink"
+                        to={`/category/${product.category.name}`}
+                      >
+                        <span>{product.category.name}</span>
+                      </Link>
                     </li>
                     <li>
                       Sub Categories
@@ -175,7 +212,7 @@ function Product() {
                     <ShoppingCartOutlined className="icon" />
                     Add to Cart
                   </button>
-                  <button onClick={handleRating}>
+                  <button onClick={handleRatingModal}>
                     <StarOutline className="icon" />
                     {user ? "Leave a Rating" : "Login to leave Rating"}
                   </button>
@@ -189,6 +226,16 @@ function Product() {
         ) : (
           <div style={{ padding: "5rem" }}>
             <CircularProgress style={{ color: "#8167a9", fontSize: "2rem" }} />
+          </div>
+        )}
+        {related && (
+          <div className="pdContainer__related">
+            <div className="pdRelated__title">Related Products</div>
+            <div className="pdRelated__main">
+              {related.map((r) => {
+                return <ProductCard product={r} key={r._id} />;
+              })}
+            </div>
           </div>
         )}
       </div>

@@ -10,12 +10,12 @@ import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import LocalSearch from "../LocalSearch/LocalSearch";
 
 function Navbar() {
-  const [keyword, setKeyword] = useState("");
   const [select, setSelect] = useState("login");
   const history = useHistory();
   const dispatch = useDispatch();
   // const state = useSelector((state) => state);
-  const { user } = useSelector((state) => ({ ...state }));
+  const { user, search } = useSelector((state) => ({ ...state }));
+  const { text } = search;
 
   const handleLogout = () => {
     firebase.auth().signOut();
@@ -26,6 +26,18 @@ function Navbar() {
     });
 
     history.push("/login");
+  };
+
+  const handleSearch = (e) => {
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: e.target.value },
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    history.push('/shop');
   };
 
   return (
@@ -47,16 +59,15 @@ function Navbar() {
         >
           <span>Shop</span>
         </NavLink>
-        <LocalSearch
-          sendClass="navContainer__search"
-          keyword={keyword}
-          setKeyword={setKeyword}
-          placeholder="Search"
-        />
-        {/* <div className="navContainer__search">
-          <input type="text" placeholder="Search" />
-          <Search className="search__icon" />
-        </div> */}
+        <form onSubmit={handleSubmit}>
+          <LocalSearch
+            sendClass="navContainer__search"
+            keyword={text}
+            functionOnChange={handleSearch}
+            placeholder="Search"
+            handleSubmit={handleSubmit}
+          />
+        </form>
       </div>
       <div className="navContainer__right">
         {!user ? (

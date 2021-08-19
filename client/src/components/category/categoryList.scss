@@ -1,0 +1,28 @@
+.listContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 0.75rem;
+  background-color: #393c45;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+
+  .listContainer__link {
+    text-align: center;
+    padding: 0.45rem 1rem;
+    width: 9rem;
+    border: 1px solid #eeeeee;
+    margin-inline: 0.25rem;
+    color: white;
+    border-radius: 0.25rem;
+    margin-block: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      color: #393c45;
+      background-color: white;
+    }
+  }
+}

@@ -39,3 +39,23 @@ export const getAccordingly = async (sort, order, limit) => {
 export const getTotalProducts = async () => {
   return await axios.get("/products/total");
 };
+
+export const setRatings = async (star, productId, authtoken) => {
+  return await axios.put(
+    `/product/star/${productId}`,
+    { star: star },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+};
+
+export const getRelated = async (productId) => {
+  return await axios.get(`/product/related/${productId}`);
+};
+
+export const getByFilter = async (data) => {
+  return await axios.post("/search/filter", data);
+};

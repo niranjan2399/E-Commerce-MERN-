@@ -10,6 +10,8 @@
     position: relative;
     display: flex;
     width: 100vw;
+    border-bottom: 1px solid #eeeeee;
+    margin-bottom: 1.5rem;
 
     .pdContainer__ratingModel {
       position: absolute;
@@ -70,18 +72,21 @@
       top: 4.5rem;
       width: fit-content;
       padding: 1.5rem;
-      border-right: 1px solid #eeeeee;
       height: 100%;
     }
 
     .pdContainer__detailContainer {
       padding: 1.5rem;
       width: 100%;
+      border-left: 1px solid #eeeeee;
 
       .pdContainer__title {
         font-size: 1.5rem;
         padding: 0.5rem;
         text-align: center;
+        background-color: #636e72;
+        border-radius: 0.125rem;
+        color: white;
         border-bottom: 1px solid #eeeeee;
         box-shadow: 0 0.25rem 1rem #eeeeee;
       }
@@ -107,6 +112,14 @@
               justify-content: space-between;
               font-size: 0.8rem;
               padding: 1rem;
+
+              .pdContainer__infoLink {
+                text-decoration: none;
+
+                &:hover {
+                  text-decoration: underline;
+                }
+              }
 
               div {
                 & div {
@@ -146,7 +159,7 @@
             font-weight: 600;
             width: 11rem;
             padding: 0.5rem 0;
-            border: 0.1rem solid #393c45;
+            border: 0.12rem solid #393c45;
             color: #393c45;
             background-color: transparent;
             cursor: pointer;
@@ -159,7 +172,7 @@
             &:hover {
               transform: translateY(-0.2rem);
               box-shadow: 0 0.5rem 0.5rem -0.4rem #8167a9;
-              border: 0.125rem solid #8167a9;
+              border: 0.12rem solid #8167a9;
               color: #8167a9;
             }
 
@@ -169,6 +182,23 @@
           }
         }
       }
+    }
+  }
+
+  .pdContainer__related {
+    .pdRelated__title {
+      text-align: center;
+      color: #393c45;
+      font-weight: 600;
+    }
+
+    .pdRelated__main {
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+      margin: 1rem 1rem 2rem 1rem;
+      background-color: #636e72;
+      border-radius: 0.25rem;
     }
   }
 }

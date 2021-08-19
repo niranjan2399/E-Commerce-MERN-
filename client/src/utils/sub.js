@@ -4,12 +4,8 @@ export const getSubs = async () => {
   return await axios.get("/sub");
 };
 
-export const getSub = async (slug, authtoken) => {
-  return await axios.get(`/sub/${slug}`, {
-    headers: {
-      authtoken,
-    },
-  });
+export const getSub = async (slug) => {
+  return await axios.get(`/sub/${slug}`);
 };
 
 export const removeSub = async (slug, authtoken) => {

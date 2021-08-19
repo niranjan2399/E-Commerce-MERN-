@@ -27,6 +27,9 @@ import Products from "./pages/admin/products/Products";
 import NewProduct from "./pages/admin/newProduct/NewProduct";
 import ProductUpdate from "./pages/admin/ProductUpdate";
 import Product from "./pages/product/Product";
+import CategoryProducts from "./pages/categoryProducts/CategoryProducts";
+import ScProducts from "./pages/scProducts/ScProducts";
+import Shop from "./pages/shop/Shop";
 
 function App() {
   const dispatch = useDispatch();
@@ -78,6 +81,13 @@ function App() {
           render={() => (user ? <Redirect to="/" /> : <ForgotPassword />)}
         />
         <Route path="/product/:slug" exact render={() => <Product />} />
+        <Route
+          path="/category/:slug"
+          exact
+          render={() => <CategoryProducts />}
+        />
+        <Route path="/subcategory/:slug" exact render={() => <ScProducts />} />
+        <Route path="/shop" exact render={() => <Shop />} />
 
         {/* user Routes */}
         <UserRoute path="/user/history" exact component={History} />

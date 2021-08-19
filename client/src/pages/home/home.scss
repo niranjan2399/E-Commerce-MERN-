@@ -1,5 +1,7 @@
 .homeContainer {
   display: flex;
+  flex-direction: column;
+
   .homeContainer__main {
     display: flex;
     flex-direction: column;
@@ -18,6 +20,10 @@
       border-radius: 0.125rem;
       border: 1px solid #ddd;
       overflow: hidden;
+
+      &:last-child {
+        margin-bottom: 2rem;
+      }
 
       &:hover {
         .homeContainer__sectionBottom .homeContainer__scrollButtons {
@@ -43,6 +49,7 @@
         display: flex;
         overflow-x: scroll;
         width: 100%;
+        padding-block: 0.5rem;
 
         &::-webkit-scrollbar {
           display: none;

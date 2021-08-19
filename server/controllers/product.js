@@ -114,10 +114,10 @@ exports.productStar = async (req, res) => {
   try {
     const product = await Product.findById(req.params.productId);
     const user = await User.findOne({ email: req.user.email });
-    const star = req.body;
+    const { star } = req.body;
 
     const alreadyRated = product.ratings.find(
-      (rating) => rating.postedBy == user._id
+      (rating) => rating.postedBy.toString() === user._id.toString()
     );
 
     if (alreadyRated === undefined) {
@@ -130,7 +130,7 @@ exports.productStar = async (req, res) => {
       );
       res.json(ratingAdded);
     } else {
-      let updatedProduct = await product.updateOne(
+      let updatedProduct = await Product.updateOne(
         {
           ratings: { $elemMatch: alreadyRated },
         },
@@ -142,6 +142,58 @@ exports.productStar = async (req, res) => {
       res.json(updatedProduct);
     }
   } catch (err) {
+    console.log(err);
     res.status(400).json(err);
+  }
+};
+
+exports.listRelated = async (req, res) => {
+  const product = await Product.findById(req.params.productId);
+
+  const related = await Product.find({
+    _id: { $ne: product._id },
+    category: product.category,
+  }).limit(3);
+
+  res.json(related);
+};
+
+// search
+const handleQuery = async (req, res, query) => {
+  try {
+    const products = await Product.find({ $text: { $search: query } })
+      .populate("category", "_id name")
+      .populate("subs", "_id name");
+
+    res.json(products);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+const handlePrice = async (req, res, price) => {
+  try {
+    const products = await Product.find({
+      price: {
+        $gte: price[0],
+        $lte: price[1],
+      },
+    });
+
+    res.json(products);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.searchFilters = async (req, res) => {
+  const { query, price } = req.body;
+
+  if (query) {
+    await handleQuery(req, res, query);
+  }
+  // price [x,y]
+  if (price !== undefined) {
+    await handlePrice(req, res, price);
   }
 };

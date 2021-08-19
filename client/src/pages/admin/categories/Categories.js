@@ -128,6 +128,10 @@ function Categories() {
     }
   };
 
+  const handleSearch = (e) => {
+    setKeyword(e.target.value);
+  };
+
   return (
     <>
       <Navbar />
@@ -148,7 +152,7 @@ function Categories() {
           <LocalSearch
             sendClass="categoryContainer__mid"
             keyword={keyword}
-            setKeyword={setKeyword}
+            functionOnChange={handleSearch}
             placeholder="Search for Categories"
           />
           {categories && (

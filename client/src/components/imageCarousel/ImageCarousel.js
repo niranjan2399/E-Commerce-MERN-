@@ -22,6 +22,7 @@ const ImageCarousel = ({ images }) => {
             <img
               className={index === current ? "active" : "inactive"}
               src={image.url}
+              key={index}
               alt=""
               onClick={(e) => setCurrent(index)}
             />
@@ -40,6 +41,7 @@ const ImageCarousel = ({ images }) => {
                   ? "imageCarousel__imgContainer active"
                   : "imageCarousel__imgContainer"
               }
+              key={index}
             >
               {index === current && <img src={image.url} alt="" />}
             </div>

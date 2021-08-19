@@ -4,12 +4,8 @@ export const getCategories = async () => {
   return await axios.get("/category");
 };
 
-export const getCategory = async (slug, authtoken) => {
-  return await axios.get(`/category/${slug}`, {
-    headers: {
-      authtoken,
-    },
-  });
+export const getCategory = async (slug) => {
+  return await axios.get(`/category/${slug}`);
 };
 
 export const removeCategory = async (slug, authtoken) => {

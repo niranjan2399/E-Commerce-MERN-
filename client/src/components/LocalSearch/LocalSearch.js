@@ -2,16 +2,26 @@ import { Search } from "@material-ui/icons";
 import React from "react";
 import "./localSearch.scss";
 
-function LocalSearch({ sendClass, keyword, setKeyword, placeholder }) {
+function LocalSearch({
+  sendClass,
+  keyword,
+  functionOnChange,
+  placeholder,
+  handleSubmit = null,
+}) {
   return (
     <div className={sendClass}>
       <input
         type="search"
         placeholder={placeholder}
         value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
+        onChange={functionOnChange}
       />
-      <Search className="search__icon" />
+      <Search
+        className="search__icon"
+        style={{ cursor: "pointer" }}
+        onClick={handleSubmit}
+      />
     </div>
   );
 }
