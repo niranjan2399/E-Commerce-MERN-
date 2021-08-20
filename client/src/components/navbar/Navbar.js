@@ -14,7 +14,7 @@ function Navbar() {
   const history = useHistory();
   const dispatch = useDispatch();
   // const state = useSelector((state) => state);
-  const { user, search } = useSelector((state) => ({ ...state }));
+  const { user, search, cart } = useSelector((state) => ({ ...state }));
   const { text } = search;
 
   const handleLogout = () => {
@@ -37,7 +37,7 @@ function Navbar() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    history.push('/shop');
+    history.push("/shop");
   };
 
   return (
@@ -133,7 +133,7 @@ function Navbar() {
               transition: "all 200ms linear",
             }}
           >
-            <Badge badgeContent={1} color="secondary" max={5}>
+            <Badge badgeContent={cart.length} color="secondary" max={5}>
               <ShoppingCart />
             </Badge>
           </IconButton>

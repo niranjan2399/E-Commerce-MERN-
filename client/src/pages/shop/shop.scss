@@ -17,6 +17,11 @@
       font-weight: 600;
       border-bottom: 1px solid #eeeeee;
     }
+
+    .shop__filterRatings {
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   .shop__right {

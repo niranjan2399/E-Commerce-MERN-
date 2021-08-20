@@ -83,18 +83,15 @@ exports.update = async (req, res) => {
 
 // WITH PAGINATION
 exports.listAccordingly = async (req, res) => {
-  const { sort, order, page } = req.body;
-  const currentPage = page || 1;
-  const perPage = 4;
+  const { sort, order, limit } = req.body;
 
   try {
     // created/updatedAt,desc/asc, no
     const data = await Product.find({})
-      .skip((currentPage - 1) * perPage)
       .populate("category")
       .populate("subs")
       .sort([[sort, order]])
-      .limit(perPage);
+      .limit(limit);
     res.json(data);
   } catch (err) {
     res.status(400).json(err);
@@ -159,7 +156,7 @@ exports.listRelated = async (req, res) => {
 };
 
 // search
-const handleQuery = async (req, res, query) => {
+const handleQuery = async (_, res, query) => {
   try {
     const products = await Product.find({ $text: { $search: query } })
       .populate("category", "_id name")
@@ -171,7 +168,7 @@ const handleQuery = async (req, res, query) => {
   }
 };
 
-const handlePrice = async (req, res, price) => {
+const handlePrice = async (_, res, price) => {
   try {
     const products = await Product.find({
       price: {
@@ -186,8 +183,58 @@ const handlePrice = async (req, res, price) => {
   }
 };
 
+const handleCategory = async (_, res, category) => {
+  try {
+    const products = await Product.find({ category });
+    res.json(products);
+  } catch (err) {
+    res.json(err);
+  }
+};
+
+const handleRating = async (_, res, stars) => {
+  try {
+    const aggregate = await Product.aggregate([
+      {
+        $project: {
+          document: "$$ROOT",
+          floorAverage: {
+            $floor: { $avg: "$ratings.star" },
+          },
+        },
+      },
+      {
+        $match: { floorAverage: stars },
+      },
+    ]);
+
+    const products = await Product.find({ _id: aggregate });
+    res.json(products);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+const handleColor = async (_, res, color) => {
+  try {
+    const products = await Product.find({ color });
+    res.json(products);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+const handleShipping = async (_, res, shipping) => {
+  try {
+    const products = await Product.find({ shipping });
+    res.json(products);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
 exports.searchFilters = async (req, res) => {
-  const { query, price } = req.body;
+  const { query, price, category, stars, color, shipping } = req.body;
 
   if (query) {
     await handleQuery(req, res, query);
@@ -195,5 +242,19 @@ exports.searchFilters = async (req, res) => {
   // price [x,y]
   if (price !== undefined) {
     await handlePrice(req, res, price);
+  }
+
+  if (category !== undefined) {
+    await handleCategory(req, res, category);
+  }
+
+  if (stars !== undefined) {
+    await handleRating(req, res, stars);
+  }
+  if (color !== undefined) {
+    await handleColor(req, res, color);
+  }
+  if (shipping !== undefined) {
+    await handleShipping(req, res, shipping);
   }
 };

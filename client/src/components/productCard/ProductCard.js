@@ -1,13 +1,16 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { removeProduct } from "../../utils/product";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromCart, handleAddToCart } from "../../utils/cart";
 import "./productCard.scss";
 
 function ProductCard({ product, setProducts = null }) {
   const path = useHistory().location.pathname;
-  const { user } = useSelector((state) => ({ ...state }));
+  const { user, cart } = useSelector((state) => ({ ...state }));
+  const [addedToCart, setAddedToCart] = useState(false);
+  const dispatch = useDispatch();
   const colors = {
     Blue: "#6E8CD5",
     Red: "#F56060",
@@ -17,6 +20,11 @@ function ProductCard({ product, setProducts = null }) {
   };
   const front = useRef();
   const back = useRef();
+
+  useEffect(() => {
+    cart &&
+      setAddedToCart(cart.some((p) => p._id === product._id) ? true : false);
+  }, [cart, product._id]);
 
   const deleteProduct = async (e) => {
     try {
@@ -35,6 +43,14 @@ function ProductCard({ product, setProducts = null }) {
     console.log("clicked");
   };
 
+  const handleAdd = () => {
+    handleAddToCart(product, dispatch);
+  };
+
+  const handleRemoveFromCart = () => {
+    removeFromCart(product, dispatch);
+  };
+
   return (
     <div className="product">
       <div className="product__make3D">
@@ -44,7 +60,18 @@ function ProductCard({ product, setProducts = null }) {
           <div className="product__overlay"></div>
           {path !== "/admin/products" && (
             <div className="product__overlayButtons">
-              <button className="product__button">Add to cart</button>
+              {addedToCart ? (
+                <button
+                  className="product__button"
+                  onClick={handleRemoveFromCart}
+                >
+                  Added
+                </button>
+              ) : (
+                <button className="product__button" onClick={handleAdd}>
+                  Add to Cart
+                </button>
+              )}
               <button className="product__button" onClick={revealBack}>
                 View gallery
               </button>
@@ -75,7 +102,7 @@ function ProductCard({ product, setProducts = null }) {
                   <span>{product.size.join(", ")}</span>
                   <strong>COLORS</strong>
                   <div className="product__colors">
-                    <div className='product__colorsWrapper'>
+                    <div className="product__colorsWrapper">
                       {product.color.map((clr) => {
                         return (
                           <div key={clr}>
@@ -88,7 +115,12 @@ function ProductCard({ product, setProducts = null }) {
                         );
                       })}
                     </div>
-                    <Link className='product__details' to={`product/${product.slug}`}>Details</Link>
+                    <Link
+                      className="product__details"
+                      to={`product/${product.slug}`}
+                    >
+                      Details
+                    </Link>
                   </div>
                 </>
               ) : (

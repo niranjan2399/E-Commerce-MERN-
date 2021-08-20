@@ -30,6 +30,7 @@ import Product from "./pages/product/Product";
 import CategoryProducts from "./pages/categoryProducts/CategoryProducts";
 import ScProducts from "./pages/scProducts/ScProducts";
 import Shop from "./pages/shop/Shop";
+import Cart from "./pages/cart/Cart";
 
 function App() {
   const dispatch = useDispatch();
@@ -88,6 +89,7 @@ function App() {
         />
         <Route path="/subcategory/:slug" exact render={() => <ScProducts />} />
         <Route path="/shop" exact render={() => <Shop />} />
+        <Route path="/cart" exact render={() => <Cart />} />
 
         {/* user Routes */}
         <UserRoute path="/user/history" exact component={History} />

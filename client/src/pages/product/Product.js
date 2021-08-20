@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Rating } from "@material-ui/lab";
 import { Box, CircularProgress, IconButton } from "@material-ui/core";
 import {
@@ -17,15 +17,19 @@ import { getProduct, getRelated, setRatings } from "../../utils/product";
 import { toast } from "react-toastify";
 import { averageRating } from "../../utils/rating";
 import ProductCard from "../../components/productCard/ProductCard";
+import { labels } from "../../utils/starLabels";
 import "./product.scss";
+import { handleAddToCart, removeFromCart } from "../../utils/cart";
 
 function Product() {
-  const { user } = useSelector((state) => ({ ...state }));
+  const { user, cart } = useSelector((state) => ({ ...state }));
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState(null);
   const [value, setValue] = useState(0);
   const [hover, setHover] = useState(-1);
   const [showModel, setShowModel] = useState(false);
+  const dispatch = useDispatch();
+  const [addedToCart, setAddedToCart] = useState(false);
   const slug = useParams().slug;
   const history = useHistory();
 
@@ -44,6 +48,12 @@ function Product() {
   }, [slug]);
 
   useEffect(() => {
+    product &&
+      cart &&
+      setAddedToCart(cart.some((p) => p._id === product._id) ? true : false);
+  }, [cart, product]);
+
+  useEffect(() => {
     if (user && product && product.ratings.length > 0) {
       setValue(product.ratings.find((obj) => obj.postedBy === user._id).star);
     }
@@ -55,19 +65,6 @@ function Product() {
     Green: "#44C28D",
     Black: "#393c45",
     Silver: "#C0C0C0",
-  };
-
-  const labels = {
-    0.5: "Useless",
-    1: "Useless+",
-    1.5: "Poor",
-    2: "Poor+",
-    2.5: "Ok",
-    3: "Ok+",
-    3.5: "Good",
-    4: "Good+",
-    4.5: "Excellent",
-    5: "Excellent+",
   };
 
   const data = [
@@ -169,7 +166,7 @@ function Product() {
                       Category
                       <Link
                         className="pdContainer__infoLink"
-                        to={`/category/${product.category.name}`}
+                        to={`/category/${product.category.slug}`}
                       >
                         <span>{product.category.name}</span>
                       </Link>
@@ -177,7 +174,12 @@ function Product() {
                     <li>
                       Sub Categories
                       {product.subs.map((sub) => (
-                        <span key={sub._id}>{sub.name}</span>
+                        <Link
+                          className="pdContainer__infoLink"
+                          to={`/subcategory/${sub.slug}`}
+                        >
+                          <span>{sub.name}</span>
+                        </Link>
                       ))}
                     </li>
                     <li>
@@ -208,10 +210,17 @@ function Product() {
                   </ul>
                 </div>
                 <div className="pdContainer__buttonDiv">
-                  <button>
-                    <ShoppingCartOutlined className="icon" />
-                    Add to Cart
-                  </button>
+                  {addedToCart ? (
+                    <button onClick={() => removeFromCart(product, dispatch)}>
+                      <ShoppingCartOutlined className="icon" />
+                      Added
+                    </button>
+                  ) : (
+                    <button onClick={() => handleAddToCart(product, dispatch)}>
+                      <ShoppingCartOutlined className="icon" />
+                      Add to Cart
+                    </button>
+                  )}
                   <button onClick={handleRatingModal}>
                     <StarOutline className="icon" />
                     {user ? "Leave a Rating" : "Login to leave Rating"}
