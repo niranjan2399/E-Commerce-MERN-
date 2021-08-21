@@ -1,0 +1,19 @@
+.couponContainer {
+  display: flex;
+
+  .couponContainer__right {
+    position: relative;
+    flex: 1;
+    padding: 1rem;
+
+    .couponContainer__form {
+      position: absolute;
+      background-color: #ddd;
+      width: 60%;
+      height: 20rem;
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}

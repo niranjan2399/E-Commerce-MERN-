@@ -1,22 +1,34 @@
 import _ from "lodash";
+import axios from "../axios";
+import { toast } from "react-toastify";
 
-export const removeFromCart = (product, dispatch) => {
-  let cart = [];
+export const removeFromCart = async (product, user, dispatch) => {
+  try {
+    let cart = [];
 
-  if (typeof window !== "undefined") {
-    if (localStorage.getItem("cart")) {
-      cart = JSON.parse(localStorage.getItem("cart"));
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("cart")) {
+        cart = JSON.parse(localStorage.getItem("cart"));
+      }
+
+      cart = cart.filter((p) => {
+        return p._id !== product._id;
+      });
+
+      await axios.post("/user/cart", cart, {
+        headers: {
+          authtoken: user.token,
+        },
+      });
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: cart,
+      });
     }
-
-    cart = cart.filter((p) => {
-      return p._id !== product._id;
-    });
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    dispatch({
-      type: "ADD_TO_CART",
-      payload: cart,
-    });
+  } catch (err) {
+    toast.error("Can't Delete Product");
   }
 };
 

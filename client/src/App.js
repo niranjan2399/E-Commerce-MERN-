@@ -31,6 +31,9 @@ import CategoryProducts from "./pages/categoryProducts/CategoryProducts";
 import ScProducts from "./pages/scProducts/ScProducts";
 import Shop from "./pages/shop/Shop";
 import Cart from "./pages/cart/Cart";
+import Checkout from "./pages/checkout/Checkout";
+import Coupon from "./pages/admin/coupons/Coupon";
+import Payment from "./pages/payment/Payment";
 
 function App() {
   const dispatch = useDispatch();
@@ -90,6 +93,8 @@ function App() {
         <Route path="/subcategory/:slug" exact render={() => <ScProducts />} />
         <Route path="/shop" exact render={() => <Shop />} />
         <Route path="/cart" exact render={() => <Cart />} />
+        <Route path="/checkout" exact render={() => <Checkout />} />
+        <Route path="/payment" exact render={() => <Payment />} />
 
         {/* user Routes */}
         <UserRoute path="/user/history" exact component={History} />
@@ -105,6 +110,7 @@ function App() {
           path="/admin/products/update/:slug"
           component={ProductUpdate}
         />
+        <AdminRoute exact path="/admin/coupons" component={Coupon} />
       </Switch>
     </Router>
   );

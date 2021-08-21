@@ -2,7 +2,7 @@ import { IconButton } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import ModalImage from "react-modal-image";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { removeFromCart } from "../../utils/cart";
 import { getProduct } from "../../utils/product";
@@ -12,6 +12,7 @@ const ProductCardCheckout = ({ product }) => {
   const [color, setColor] = useState(product.color ? product.color : "");
   const [count, setCount] = useState(product.count);
   const [colors, setColors] = useState();
+  const { user } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -73,7 +74,7 @@ const ProductCardCheckout = ({ product }) => {
   };
 
   const handleDelete = () => {
-    removeFromCart(product, dispatch);
+    removeFromCart(product, user, dispatch);
   };
 
   return (

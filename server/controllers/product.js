@@ -139,7 +139,6 @@ exports.productStar = async (req, res) => {
       res.json(updatedProduct);
     }
   } catch (err) {
-    console.log(err);
     res.status(400).json(err);
   }
 };

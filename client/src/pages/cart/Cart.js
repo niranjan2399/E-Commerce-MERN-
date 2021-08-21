@@ -1,6 +1,8 @@
+import axios from "../../axios";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 import Navbar from "../../components/navbar/Navbar";
 import ProductCardCheckout from "../../components/productCardCheckout/ProductCardCheckout";
 import "./cart.scss";
@@ -21,7 +23,7 @@ const Cart = () => {
     return total;
   };
 
-  const saveOrderToDb = async () => {
+  const handleLogin = async () => {
     history.push({
       pathname: "/login",
       state: { from: "/cart" },
@@ -47,6 +49,25 @@ const Cart = () => {
       ))}
     </table>
   );
+
+  const handleCheckout = async () => {
+    const productWithoutColor = cart.filter((prod) => prod.color === null);
+    if (productWithoutColor.length) {
+      return toast.error("Color not selected for a product");
+    } else {
+      try {
+        const res = await axios.post("/user/cart", cart, {
+          headers: {
+            authtoken: user.token,
+          },
+        });
+        if (res.data.ok) history.push("/checkout");
+      } catch (err) {
+        toast.error("Cannot connect to DB!!");
+      }
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -82,9 +103,11 @@ const Cart = () => {
           <hr />
           <div className="cartContainer__rightBottom">
             {user && user ? (
-              <button disabled={!cart.length}>PROCEED TO CHECKOUT</button>
+              <button disabled={!cart.length} onClick={handleCheckout}>
+                PROCEED TO CHECKOUT
+              </button>
             ) : (
-              <button onClick={saveOrderToDb} disabled={!cart.length}>
+              <button onClick={handleLogin} disabled={!cart.length}>
                 LOGIN TO CHECKOUT
               </button>
             )}
