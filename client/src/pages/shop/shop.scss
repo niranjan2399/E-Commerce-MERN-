@@ -3,11 +3,19 @@
 
   .shop__left {
     position: sticky;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 20rem;
-    height: 100vh;
+    height: calc(100vh - 4.5rem);
     top: 4.5rem;
-    padding: 0.5rem;
-    background: #485460;
+    padding: 1rem;
+    background: #48546069;
+    overflow: auto;
+
+    .MuiTypography-root {
+      font-size: 0.85rem;
+    }
 
     .shop__filterHead {
       padding-bottom: 0.75rem;
@@ -15,12 +23,73 @@
       color: white;
       text-align: center;
       font-weight: 600;
+      width: 100%;
       border-bottom: 1px solid #eeeeee;
+    }
+
+    button {
+      $button-bg: #8167a9;
+      padding: 0.75rem 2rem;
+      margin-bottom: 0.85rem;
+      margin-top: 0.25rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-block;
+      background-color: $button-bg;
+      color: white;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      position: relative;
+      transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+      box-shadow: 0 2px 25px rgba(#8167a9, 0.5);
+
+      &:focus {
+        outline: 0;
+      }
+
+      &:before,
+      &:after {
+        position: absolute;
+        content: "";
+        display: block;
+        width: 140%;
+        height: 100%;
+        left: -20%;
+        z-index: -1000;
+        transition: all ease-in-out 0.5s;
+        background-repeat: no-repeat;
+      }
+
+      &:active {
+        transform: scale(0.9);
+        background-color: darken($button-bg, 5%);
+        box-shadow: 0 2px 25px rgba(#8167a9, 0.2);
+      }
+    }
+
+    .shop__filterSlider {
+      margin-top: 0.35rem;
+      padding-inline: 1rem;
+      height: 3.75rem;
+      justify-content: flex-end;
     }
 
     .shop__filterRatings {
       display: flex;
+      align-items: center;
+      padding-block: 0.5rem;
+    }
+
+    .shop__filterSlider,
+    .shop__filterCategory,
+    .shop__filterRatings,
+    .shop__filterShipping,
+    .shop__filterColors {
+      display: flex;
       flex-direction: column;
+      border-radius: 0.25rem;
+      margin: 0.5rem 1rem;
+      background-color: #c8d6e5;
     }
   }
 
@@ -38,4 +107,18 @@
       }
     }
   }
+}
+
+.PrivateValueLabel-thumb-1.PrivateValueLabel-open-2
+  .PrivateValueLabel-offset-3 {
+  transform: scale(1) translateY(-4px) !important;
+}
+
+.MuiSlider-valueLabel {
+  left: calc(-50% - 1.5px) !important;
+}
+
+.PrivateValueLabel-circle-4 {
+  width: 28px !important;
+  height: 28px !important;
 }

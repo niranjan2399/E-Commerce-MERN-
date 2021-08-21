@@ -1,0 +1,23 @@
+.accordion {
+  width: 100%;
+  background-color: white;
+  margin-bottom: 0.5rem;
+  border-radius: 0.125rem;
+
+  .accordion__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #eeeeee;
+    border-radius: 0.125rem;
+    cursor: pointer;
+  }
+
+  .accordion__bottom {
+    overflow: hidden;
+    max-height: 0;
+    transition: all 200ms ease-in;
+  }
+}
