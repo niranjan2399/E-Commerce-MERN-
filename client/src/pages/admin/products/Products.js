@@ -5,6 +5,7 @@ import AdminSidebar from "../../../components/adminSidebar/AdminSidebar";
 import "./products.scss";
 import ProductCard from "../../../components/productCard/ProductCard";
 import { listProducts } from "../../../utils/product";
+import { Add } from "@material-ui/icons";
 
 function Products() {
   const [products, setProducts] = useState(null);
@@ -28,6 +29,7 @@ function Products() {
               to="/admin/products/new"
               className="productContainer__newButton"
             >
+              <Add style={{ marginRight: ".5rem" }} />
               Create New Product
             </Link>
           </div>

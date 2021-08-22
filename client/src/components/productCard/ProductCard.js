@@ -68,8 +68,12 @@ function ProductCard({ product, setProducts = null }) {
                   Added
                 </button>
               ) : (
-                <button className="product__button" onClick={handleAdd}>
-                  Add to Cart
+                <button
+                  className="product__button"
+                  disabled={product.quantity < 1}
+                  onClick={handleAdd}
+                >
+                  {product.quantity < 1 ? "Out of Stock" : "Add to Cart"}
                 </button>
               )}
               <button className="product__button" onClick={revealBack}>

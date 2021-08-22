@@ -1,4 +1,4 @@
-const route = require("express").Router();
+const router = require("express").Router();
 
 const {
   getUser,
@@ -7,14 +7,28 @@ const {
   deleteCart,
   saveAddress,
   applyCoupon,
+  createOrder,
+  orders,
+  updateWishList,
+  wishList,
+  addToWishList,
 } = require("../controllers/user");
+
 const { authCheck } = require("../middlewares/auth.js");
 
 // route.post("/user/:email", getUser);
-route.post("/user/cart", authCheck, userCart);
-route.get("/user/cart", authCheck, getUserCart);
-route.delete("/user/cart", authCheck, deleteCart);
-route.post("/user/address", authCheck, saveAddress);
-route.post("/user/cart/coupon", authCheck, applyCoupon);
+router.post("/user/cart", authCheck, userCart);
+router.get("/user/cart", authCheck, getUserCart);
+router.delete("/user/cart", authCheck, deleteCart);
+router.post("/user/cart/coupon", authCheck, applyCoupon);
 
-module.exports = route;
+router.post("/user/address", authCheck, saveAddress);
+
+router.post("/user/order", authCheck, createOrder);
+router.get("/user/orders", authCheck, orders);
+
+router.post("/user/wishlist", authCheck, addToWishList);
+router.get("/user/wishlist", authCheck, wishList);
+router.put("/user/wishlist/:productId", authCheck, updateWishList);
+
+module.exports = router;

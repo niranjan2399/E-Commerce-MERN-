@@ -4,6 +4,8 @@ import { auth } from "../../../firebase";
 import Navbar from "../../../components/navbar/Navbar";
 import { useSelector } from "react-redux";
 import UserSidebar from "../../../components/userSidebar/UserSidebar";
+import AdminSidebar from "../../../components/adminSidebar/AdminSidebar";
+import "./password.scss";
 
 function Password() {
   const { user } = useSelector((state) => ({ ...state }));
@@ -27,6 +29,7 @@ function Password() {
         toast.error("Password update failed");
       }
     } else {
+      setLoading(false);
       toast.error("Passwords don't match");
     }
   };
@@ -34,33 +37,48 @@ function Password() {
   return (
     <>
       <Navbar />
-      {user && <UserSidebar />}
-      <div>
-        <h3>Password Update</h3>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="password">Enter new Password</label>
-          <input
-            type="password"
-            name="password"
-            id=""
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={loading}
-            autoComplete="password"
-          />
-          <label htmlFor="rePassword">Re-Enter new Password</label>
-          <input
-            type="password"
-            name="rePassword"
-            value={rePassword}
-            onChange={(e) => setRePassword(e.target.value)}
-            disabled={loading}
-            autoComplete="rePassword"
-          />
-          <button type="submit" disabled={!password || !rePassword}>
-            Submit
-          </button>
-        </form>
+      <div className="passwordContainer">
+        {user && user.role === "admin" ? <AdminSidebar /> : <UserSidebar />}
+        <div className="passwordContainer__main">
+          <h2>Password Update</h2>
+          <div className="passwordContainer__form">
+            <form onSubmit={handleSubmit}>
+              <label htmlFor="password">Enter new Password</label>
+              <input
+                type="password"
+                name="password"
+                id=""
+                value={password}
+                min="6"
+                autoFocus
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
+                autoComplete="password"
+              />
+              <label htmlFor="rePassword">Re-Enter new Password</label>
+              <input
+                type="password"
+                name="rePassword"
+                value={rePassword}
+                required
+                onChange={(e) => setRePassword(e.target.value)}
+                disabled={loading}
+                autoComplete="rePassword"
+              />
+              <button
+                type="submit"
+                disabled={password.length < 6}
+              >
+                Submit
+              </button>
+              {password.length < 6 && password.length >= 1 && (
+                <div className="rcContainer__error">
+                  <span>Password must be 6 characters long</span>
+                </div>
+              )}
+            </form>
+          </div>
+        </div>
       </div>
     </>
   );

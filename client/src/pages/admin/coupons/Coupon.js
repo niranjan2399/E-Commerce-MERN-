@@ -7,9 +7,10 @@ import AdminSidebar from "../../../components/adminSidebar/AdminSidebar";
 import Overlay from "../../../components/overlay/Overlay";
 import "react-datepicker/dist/react-datepicker.css";
 import { IconButton } from "@material-ui/core";
-import { Close, Delete } from "@material-ui/icons";
+import { Close, Delete, Add } from "@material-ui/icons";
 import "./coupon.scss";
 import { useSelector } from "react-redux";
+import { formHide } from "../../../utils/animate";
 
 const Coupon = () => {
   const [coupons, setCoupons] = useState(null);
@@ -36,6 +37,11 @@ const Coupon = () => {
     }
   };
 
+  const handleViewForm = () => {
+    overlay.current.classList.add("reveal");
+    form.current.classList.add("reveal");
+  };
+
   return (
     <>
       <Navbar />
@@ -50,19 +56,21 @@ const Coupon = () => {
               formRef={form}
             />
           </div>
-          <div>
-            <h2>Coupons</h2>
-            <button>Create New Coupon</button>
+          <div className="couponContainer__top">
+            <h2 className="couponContainer__title">Coupons</h2>
+            <button onClick={handleViewForm}>
+              <Add style={{ marginRight: ".5rem" }} />
+              Create New Coupon
+            </button>
           </div>
-          <hr />
-          <div>
+          <div className="couponContainer__bottom">
             <table>
               <thead>
                 <tr>
                   <th scope="col">Name</th>
                   <th scope="col">Expiry</th>
                   <th scope="col">Discount</th>
-                  <th scope="col">Delete</th>
+                  <th scope="col">Actions</th>
                 </tr>
               </thead>
               {coupons &&
@@ -72,9 +80,11 @@ const Coupon = () => {
                       <tr>
                         <td>{coupon.name}</td>
                         <td>{new Date(coupon.expiry).toLocaleDateString()}</td>
-                        <td>{coupon.discount}</td>
+                        <td>{coupon.discount}%</td>
                         <td>
                           <IconButton
+                            className="icon"
+                            style={{ width: "2.5rem", height: "2.5rem" }}
                             data-coupon_id={coupon._id}
                             onClick={handleDelete}
                           >
@@ -97,12 +107,11 @@ const CouponForm = ({ overlayRef, formRef, setCoupons }) => {
   const [name, setName] = useState("");
   const [expiry, setExpiry] = useState("");
   const [discount, setDiscount] = useState("");
-  const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => ({ ...state }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    formHide(overlayRef, formRef);
 
     try {
       const newCoupon = await createCoupon(
@@ -113,7 +122,6 @@ const CouponForm = ({ overlayRef, formRef, setCoupons }) => {
       setName("");
       setExpiry("");
       setDiscount("");
-      setLoading(false);
       setCoupons((c) => [...c, newCoupon.data]);
 
       toast.success("Coupon created successfully");
@@ -123,41 +131,51 @@ const CouponForm = ({ overlayRef, formRef, setCoupons }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className="couponForm__container">
       <div className="couponForm__top">
-        <span>Create New Coupon</span>
-        <IconButton>
+        <span className="couponForm__head">Create New Coupon</span>
+        <IconButton
+          style={{ width: "2.5rem", height: "2.5rem" }}
+          onClick={() => formHide(overlayRef, formRef)}
+        >
           <Close />
         </IconButton>
       </div>
-      <input
-        type="text"
-        value={name}
-        autoFocus
-        placeholder="Coupon Name"
-        required
-        onChange={(e) => setName(e.target.value.toUpperCase())}
-      />
-      <input
-        type="number"
-        value={discount}
-        placeholder="Discount %"
-        required
-        onChange={(e) => setDiscount(e.target.value)}
-      />
-      <div className="couponForm__dateGroup">
-        <DatePicker
-          selected={new Date()}
-          value={expiry}
-          placeholderText="Expiry"
-          minDate={Date.now()}
-          name="date"
+      <form onSubmit={handleSubmit}>
+        <input
+          className="inputContainer"
+          type="text"
+          value={name}
+          autoFocus
+          placeholder="Coupon Name"
           required
-          onChange={(date) => setExpiry(date)}
+          onChange={(e) => setName(e.target.value.toUpperCase())}
         />
-      </div>
-      <button type="submit">Save</button>
-    </form>
+        <input
+          className="inputContainer"
+          type="number"
+          value={discount}
+          placeholder="Discount %"
+          required
+          onChange={(e) => setDiscount(e.target.value)}
+        />
+        <div className="couponForm__dateGroup">
+          <DatePicker
+            className="inputContainer"
+            selected={new Date()}
+            value={expiry}
+            placeholderText="Expiry"
+            minDate={Date.now()}
+            name="date"
+            required
+            onChange={(date) => setExpiry(date)}
+          />
+        </div>
+        <button className="submit__button" type="submit">
+          Save
+        </button>
+      </form>
+    </div>
   );
 };
 

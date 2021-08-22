@@ -1,0 +1,21 @@
+.redirectContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+
+  div {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #393c45;
+    vertical-align: middle;
+
+    span {
+      font-size: 4rem;
+      color: #feca57;
+      vertical-align: middle;
+      padding-inline: 1rem;
+    }
+  }
+}

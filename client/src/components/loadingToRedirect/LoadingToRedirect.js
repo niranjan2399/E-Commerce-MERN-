@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import "./loadingToRedirect.scss";
 
 function LoadingToRedirect() {
   const [count, setCount] = useState(5);
@@ -17,7 +18,15 @@ function LoadingToRedirect() {
     };
   }, [count, history]);
 
-  return <div>Redirecting you in {count} seconds.</div>;
+  return (
+    <>
+      <div className="redirectContainer">
+        <div>
+          Redirecting you in <span>{count}</span> seconds.
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default LoadingToRedirect;

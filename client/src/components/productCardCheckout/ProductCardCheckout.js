@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { removeFromCart } from "../../utils/cart";
 import { getProduct } from "../../utils/product";
-import "./productCardCheckout.scss";
 
 const ProductCardCheckout = ({ product }) => {
   const [color, setColor] = useState(product.color ? product.color : "");
@@ -81,7 +80,7 @@ const ProductCardCheckout = ({ product }) => {
     <tbody>
       <tr>
         <td>
-          <div style={{ width: "6.25rem", height: "auto" }}>
+          <div className="modal" style={{ width: "6.25rem", height: "auto" }}>
             <ModalImage
               small={product.images[0].url}
               large={product.images[0].url}
@@ -90,8 +89,7 @@ const ProductCardCheckout = ({ product }) => {
           </div>
         </td>
         <td>{product.title}</td>
-        <td>{product.price}</td>
-        <td>{product.category.name}</td>
+        <td>${product.price}</td>
         <td>
           <select name="color" value={color} onChange={handleColorChange}>
             {product.color ? (
@@ -125,8 +123,11 @@ const ProductCardCheckout = ({ product }) => {
         </td>
         <td>{product.shipping}</td>
         <td>
-          <IconButton onClick={handleDelete}>
-            <Delete />
+          <IconButton
+            onClick={handleDelete}
+            style={{ width: "2.5rem", height: "2.5rem" }}
+          >
+            <Delete style={{ color: "#ff7675" }} />
           </IconButton>
         </td>
       </tr>

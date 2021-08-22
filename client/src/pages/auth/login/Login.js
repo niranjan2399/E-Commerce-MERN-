@@ -73,7 +73,7 @@ const LoginForm = () => {
       roleBasedRedirect(role);
     } catch (err) {
       setLoading(false);
-      toast.error(err.response.data);
+      toast.error(err.message);
     }
   };
 

@@ -4,16 +4,168 @@
   .couponContainer__right {
     position: relative;
     flex: 1;
-    padding: 1rem;
+    padding-block: 1rem;
+    padding-inline: 1.5rem;
 
     .couponContainer__form {
       position: absolute;
-      background-color: #ddd;
-      width: 60%;
-      height: 20rem;
+      background-color: rgb(250, 246, 237);
+      width: 25rem;
+      height: fit-content;
       top: 15%;
       left: 50%;
-      transform: translateX(-50%);
+      padding: 1.125rem;
+      border-radius: 0.25rem;
+      z-index: 1;
+      transform: translateX(-50%) scale(0);
+
+      &.reveal {
+        animation: zoomIn 0.5s 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+
+        &.hide {
+          animation: zoomOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+      }
+
+      .couponForm__container {
+        .couponForm__top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 1.125rem;
+          margin-top: -0.5rem;
+
+          .couponForm__head {
+            font-size: 1.125rem;
+          }
+        }
+
+        form {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          .inputContainer {
+            width: 100%;
+            border: 1px solid #cccccc;
+            border-radius: 0.35rem;
+            padding: 0.65rem;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+
+            &:focus {
+              outline: none;
+            }
+          }
+
+          .submit__button {
+            position: relative;
+            display: block;
+            padding-block: 0.5rem;
+            padding-inline: 2.45rem;
+            background-color: white;
+            color: black;
+            cursor: pointer;
+            font-size: 0.875rem;
+            border: 2px solid #353b48;
+            transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+
+            &:hover {
+              color: white !important;
+              background-color: transparent;
+            }
+
+            &:before {
+              display: block;
+              position: absolute;
+              content: "";
+              top: 0px;
+              right: 0px;
+              height: 100%;
+              width: 0px;
+              z-index: -1;
+              color: white !important;
+              background: #353b48;
+              transition: all 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+            }
+
+            &:hover:before {
+              left: 0%;
+              right: auto;
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+
+    .couponContainer__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eeeeee;
+      margin-bottom: 1.25rem;
+
+      button {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        border: 0.25rem solid #ddd;
+        background-color: transparent;
+        border-radius: 0.125rem;
+        font-size: 0.75rem;
+        height: 3.25rem;
+        cursor: pointer;
+        transition: all 200ms linear;
+
+        &:hover {
+          color: gray;
+          background-color: #8167a93b;
+          box-shadow: 0 0.5rem 0.5rem -0.4rem #8167a9;
+          border: 0.25rem solid #8167a9a9;
+          transform: translateY(-0.2rem);
+        }
+      }
+    }
+
+    .couponContainer__bottom {
+      table {
+        table-layout: fixed;
+        border: 1px solid #eeeeee;
+        width: 100%;
+
+        thead {
+          background-color: #8167a9;
+
+          tr {
+            height: fit-content;
+          }
+
+          th {
+            color: white;
+            padding-block: 0.5rem;
+          }
+        }
+
+        tbody {
+          tr {
+            height: fit-content;
+
+            td {
+              border: 1px solid #eeeeee;
+              text-align: center;
+              padding: 0.5rem;
+
+              .icon {
+                color: #ff7675;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

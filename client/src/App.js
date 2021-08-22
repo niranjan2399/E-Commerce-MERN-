@@ -93,12 +93,12 @@ function App() {
         <Route path="/subcategory/:slug" exact render={() => <ScProducts />} />
         <Route path="/shop" exact render={() => <Shop />} />
         <Route path="/cart" exact render={() => <Cart />} />
-        <Route path="/checkout" exact render={() => <Checkout />} />
-        <Route path="/payment" exact render={() => <Payment />} />
 
         {/* user Routes */}
         <UserRoute path="/user/history" exact component={History} />
         <UserRoute path="/user/password" exact component={Password} />
+        <UserRoute path="/checkout" exact component={Checkout} />
+        <UserRoute path="/payment" exact component={Payment} />
 
         {/* admin Routes */}
         <AdminRoute exact path="/admin/dashboard" component={Dashboard} />

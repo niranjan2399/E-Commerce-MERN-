@@ -97,16 +97,6 @@
     }
   }
 
-  .rcContainer__error {
-    background-color: red;
-    padding-block: 0.25rem;
-    padding-inline: 1rem;
-    border-radius: 0.25rem;
-    font-size: 0.75rem;
-    color: white;
-    margin-top: 1rem;
-  }
-
   button {
     display: flex;
     align-items: center;
@@ -129,4 +119,14 @@
       color: #8167a9;
     }
   }
+}
+
+.rcContainer__error {
+  background-color: red;
+  padding-block: 0.25rem;
+  padding-inline: 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  color: white;
+  margin-top: 1rem;
 }

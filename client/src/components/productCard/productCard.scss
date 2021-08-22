@@ -105,9 +105,16 @@
           font-weight: 600;
           border: 0.1rem solid white;
 
-          &:hover {
-            background-color: white;
-            color: #8167a9;
+          &:enabled {
+            &:hover {
+              background-color: white;
+              color: #8167a9;
+            }
+          }
+
+          &:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
           }
 
           &:not(:first-child) {

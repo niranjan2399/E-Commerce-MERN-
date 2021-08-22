@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Product = require("../models/Product");
 const Cart = require("../models/Cart");
 const Coupon = require("../models/Coupon");
+const Order = require("../models/Order");
 
 exports.getUser = async (req, res) => {
   try {
@@ -126,6 +127,101 @@ exports.applyCoupon = async (req, res) => {
     );
 
     res.json(totalAfterDiscount);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.createOrder = async (req, res) => {
+  try {
+    const { paymentIntent } = req.body.stripeResponse;
+    const user = await User.findOne({ email: req.user.email });
+
+    let { products } = await Cart.findOne({ orderedBy: user._id });
+
+    await new Order({
+      products,
+      paymentIntent,
+      orderedBy: user._id,
+    }).save();
+
+    // increment sold, decrement quantity
+    let bulkOption = products.map((item) => {
+      return {
+        updateOne: {
+          filter: { _id: item.product._id },
+          update: {
+            $inc: {
+              quantity: -item.count,
+              sold: +item.count,
+            },
+          },
+        },
+      };
+    });
+
+    let updated = await Product.bulkWrite(bulkOption, {});
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  }
+};
+
+exports.orders = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.user.email });
+
+    const order = await Order.find({ orderedBy: user._id }).populate(
+      "products.product"
+    );
+
+    res.json(order);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.addToWishList = async (req, res) => {
+  try {
+    const { productId } = req.body;
+
+    const updateUser = await User.findOneAndUpdate(
+      { email: req.user.email },
+      { $push: { wishlist: productId } }
+    );
+
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.wishList = async (req, res) => {
+  try {
+    const wishlist = await User.findOne({ email: req.user.email })
+      .select("wishlist")
+      .populate("wishlist");
+
+    res.json(wishList);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.updateWishList = async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    const updated = await User.findOneAndUpdate(
+      { email: req.user.email },
+      {
+        $pull: { wishlist: productId },
+      }
+    );
+
+    res.json({ ok: true });
   } catch (err) {
     res.status(400).json(err);
   }

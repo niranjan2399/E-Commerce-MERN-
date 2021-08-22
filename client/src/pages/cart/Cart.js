@@ -31,23 +31,25 @@ const Cart = () => {
   };
 
   const showCartItems = () => (
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Image</th>
-          <th scope="col">Title</th>
-          <th scope="col">Price</th>
-          <th scope="col">Category</th>
-          <th scope="col">Color</th>
-          <th scope="col">Count</th>
-          <th scope="col">Shipping</th>
-          <th scope="col">Remove</th>
-        </tr>
-      </thead>
-      {cart.map((product) => (
-        <ProductCardCheckout key={product._id} product={product} />
-      ))}
-    </table>
+    <>
+      <h3>Products ({cart.length})</h3>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Image</th>
+            <th scope="col">Title</th>
+            <th scope="col">Price</th>
+            <th scope="col">Color</th>
+            <th scope="col">Count</th>
+            <th scope="col">Shipping</th>
+            <th scope="col">Remove</th>
+          </tr>
+        </thead>
+        {cart.map((product) => (
+          <ProductCardCheckout key={product._id} product={product} />
+        ))}
+      </table>
+    </>
   );
 
   const handleCheckout = async () => {
