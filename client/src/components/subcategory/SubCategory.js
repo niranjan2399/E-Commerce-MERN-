@@ -39,7 +39,7 @@ function SubCategory({
         return p.slug !== slug;
       });
     });
-    toast.success("SubCategory deleted");
+    toast.success("SubCategory Deleted");
     try {
     } catch (err) {
       toast.error(err.response.data);

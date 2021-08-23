@@ -17,20 +17,20 @@ function UserSidebar() {
         </li>
         <li className="sidebar__li">
           <NavLink
-            to="/user/password"
-            className="sidebar__link"
-            activeClassName="sidebar__link--active"
-          >
-            Password
-          </NavLink>
-        </li>
-        <li className="sidebar__li">
-          <NavLink
             to="/user/wishlist"
             className="sidebar__link"
             activeClassName="sidebar__link--active"
           >
             WishList
+          </NavLink>
+        </li>
+        <li className="sidebar__li">
+          <NavLink
+            to="/user/password"
+            className="sidebar__link"
+            activeClassName="sidebar__link--active"
+          >
+            Password
           </NavLink>
         </li>
       </ul>

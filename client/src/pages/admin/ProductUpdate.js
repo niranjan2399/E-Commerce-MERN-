@@ -122,7 +122,7 @@ function ProductUpdate() {
       });
       setValues({ ...values, images: filteredImages });
     } catch (err) {
-      toast.error("Can't remove Image");
+      toast.error("Can't Remove Image");
     }
   };
 

@@ -7,5 +7,84 @@
     flex: 1;
     padding-block: 1rem;
     padding-inline: 1.5rem;
+
+    .historyContainer__top {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eeeeee;
+      margin-bottom: 1.25rem;
+    }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .historyContainer__orderCard {
+      width: 100%;
+      border-radius: 0.25rem;
+      border: 2px solid #eeeeee;
+      margin-bottom: 1rem;
+      padding: 1rem;
+
+      .historyContainer__orderTop {
+        margin-bottom: 1rem;
+        width: 100%;
+        background-color: #f1f2f6;
+        border-radius: 0.25rem;
+        color: #2c3a47;
+        padding: 1rem;
+
+        .historyContainer__details {
+          display: flex;
+
+          div {
+            font-size: 0.8rem;
+
+            &:first-of-type {
+              flex: 2;
+            }
+            &:last-of-type {
+              flex: 1;
+            }
+
+            span {
+              font-size: 0.9rem;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+
+      table {
+        width: 100%;
+        border: 1px solid #eeeeee;
+
+        thead {
+          background-color: #8167a9;
+
+          tr {
+            height: 100%;
+
+            th {
+              padding-block: 0.5rem;
+              color: white;
+            }
+          }
+        }
+
+        tr {
+          height: 100%;
+
+          td {
+            border: 1px solid #eeeeee;
+            padding-block: 0.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
   }
 }

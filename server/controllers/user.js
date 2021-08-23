@@ -187,9 +187,9 @@ exports.addToWishList = async (req, res) => {
   try {
     const { productId } = req.body;
 
-    const updateUser = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { email: req.user.email },
-      { $push: { wishlist: productId } }
+      { $addToSet: { wishlist: productId } }
     );
 
     res.json({ ok: true });
@@ -204,7 +204,7 @@ exports.wishList = async (req, res) => {
       .select("wishlist")
       .populate("wishlist");
 
-    res.json(wishList);
+    res.json(wishlist);
   } catch (err) {
     res.status(400).json(err);
   }

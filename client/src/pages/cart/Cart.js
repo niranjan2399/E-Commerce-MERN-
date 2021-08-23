@@ -1,15 +1,26 @@
 import axios from "../../axios";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import Navbar from "../../components/navbar/Navbar";
+import { CircularProgress } from "@material-ui/core";
 import ProductCardCheckout from "../../components/productCardCheckout/ProductCardCheckout";
 import "./cart.scss";
+import { ArrowDownwardOutlined } from "@material-ui/icons";
 
 const Cart = () => {
+  const [coupons, setCoupons] = useState(null);
+  const [copied, setCopied] = useState([]);
   const { user, cart } = useSelector((state) => ({ ...state }));
   const history = useHistory();
+
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get("/coupons");
+      setCoupons(res.data);
+    })();
+  }, []);
 
   const product = () => {
     let total = 0;
@@ -32,30 +43,19 @@ const Cart = () => {
 
   const showCartItems = () => (
     <>
-      <h3>Products ({cart.length})</h3>
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Image</th>
-            <th scope="col">Title</th>
-            <th scope="col">Price</th>
-            <th scope="col">Color</th>
-            <th scope="col">Count</th>
-            <th scope="col">Shipping</th>
-            <th scope="col">Remove</th>
-          </tr>
-        </thead>
+      <h3>Shopping Cart</h3>
+      <div className="cartContainer__products">
         {cart.map((product) => (
           <ProductCardCheckout key={product._id} product={product} />
         ))}
-      </table>
+      </div>
     </>
   );
 
   const handleCheckout = async () => {
     const productWithoutColor = cart.filter((prod) => prod.color === null);
     if (productWithoutColor.length) {
-      return toast.error("Color not selected for a product");
+      return toast.error("Could Not Find Color For A Product");
     } else {
       try {
         const res = await axios.post("/user/cart", cart, {
@@ -70,52 +70,143 @@ const Cart = () => {
     }
   };
 
+  const handleCopyCoupon = (e) => {
+    const couponName = e.target.dataset.coupon;
+
+    navigator.clipboard.writeText(couponName);
+    setCopied([...copied, couponName]);
+  };
+
   return (
     <>
       <Navbar />
-      <div className="cartContainer">
-        <div className="cartContainer__left">
-          {cart.length ? (
-            showCartItems()
-          ) : (
-            <>
-              No products in cart. <Link to="/">Continue Shopping</Link>
-            </>
+      {cart.length ? (
+        <div className="cartContainer">
+          <div
+            className="cartContainer__bottomArrowFloat"
+            onClick={() =>
+              window.scroll({
+                left: 0,
+                top: document.body.scrollHeight,
+                behavior: "smooth",
+              })
+            }
+          >
+            <ArrowDownwardOutlined className="icon" />
+          </div>
+          <div className="cartContainer__left">{showCartItems()}</div>
+          {cart.length && (
+            <div className="cartContainer__right">
+              <div className="cartContainer__coupon">
+                <h3>Coupons</h3>
+                <div className="couponContainer">
+                  {coupons ? (
+                    coupons.map((coupon) => {
+                      return (
+                        <div
+                          key={coupon._id}
+                          className="couponContainer__wrapper"
+                        >
+                          <div className="couponContainer__left">
+                            <p className="couponContainer__name">
+                              {coupon.name}
+                            </p>
+                            <div className="couponContainer__discount">
+                              <span
+                                style={{
+                                  fontWeight: "500",
+                                  marginRight: ".5rem",
+                                }}
+                              >
+                                Discount
+                              </span>
+                              <span>{coupon.discount}%</span>
+                            </div>
+                          </div>
+                          <div className="couponContainer__button">
+                            <button
+                              data-coupon={coupon.name}
+                              onClick={handleCopyCoupon}
+                            >
+                              {copied.some((text) => text === coupon.name)
+                                ? "COPIED"
+                                : "COPY"}
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div style={{ width: "100%", textAlign: "center" }}>
+                      <CircularProgress
+                        style={{
+                          width: "1.5rem",
+                          color: "#8167a9",
+                          height: "1.5rem",
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="cartContainer__summary">
+                <h3>Order Summary</h3>
+                <div className="cartContainer__productPrice">
+                  {cart.map((product) => {
+                    return (
+                      <div key={product._id}>
+                        <span>{product.title + " * " + product.count}</span>
+                        <span>
+                          {" = " +
+                            (product.price * product.count).toLocaleString(
+                              "en-US",
+                              {
+                                style: "currency",
+                                currency: "USD",
+                              }
+                            )}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <hr />
+                <div className="cartContainer__rightMid">
+                  <div>
+                    <span>
+                      Subtotal(
+                      {cart.length === 1 ? "1 item" : `${cart.length} items`})
+                    </span>
+                    <span>
+                      {"= " +
+                        product().toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        })}
+                    </span>
+                  </div>
+                </div>
+                <hr />
+                <div className="cartContainer__rightBottom">
+                  {user && user ? (
+                    <button disabled={!cart.length} onClick={handleCheckout}>
+                      PROCEED TO CHECKOUT
+                    </button>
+                  ) : (
+                    <button onClick={handleLogin} disabled={!cart.length}>
+                      LOGIN TO CHECKOUT
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
           )}
         </div>
-        <div className="cartContainer__right">
-          <h3>Order Summary</h3>
-          <hr />
-          <span>Products</span>
-          {cart.map((product) => {
-            return (
-              <span key={product._id}>
-                {product.title +
-                  " * " +
-                  product.count +
-                  " = $" +
-                  product.price * product.count}
-              </span>
-            );
-          })}
-          <hr />
-          <div className="cartContainer__rightMid">
-            <span>Total = ${product()}</span>
-          </div>
-          <hr />
-          <div className="cartContainer__rightBottom">
-            {user && user ? (
-              <button disabled={!cart.length} onClick={handleCheckout}>
-                PROCEED TO CHECKOUT
-              </button>
-            ) : (
-              <button onClick={handleLogin} disabled={!cart.length}>
-                LOGIN TO CHECKOUT
-              </button>
-            )}
-          </div>
+      ) : (
+        <div className="noProducts">
+          No products in cart. <Link to="/">Continue Shopping</Link>
         </div>
-      </div>
+      )}
     </>
   );
 };

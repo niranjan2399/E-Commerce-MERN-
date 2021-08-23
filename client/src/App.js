@@ -34,6 +34,7 @@ import Cart from "./pages/cart/Cart";
 import Checkout from "./pages/checkout/Checkout";
 import Coupon from "./pages/admin/coupons/Coupon";
 import Payment from "./pages/payment/Payment";
+import Wishlist from "./pages/user/wishlist/Wishlist";
 
 function App() {
   const dispatch = useDispatch();
@@ -99,6 +100,7 @@ function App() {
         <UserRoute path="/user/password" exact component={Password} />
         <UserRoute path="/checkout" exact component={Checkout} />
         <UserRoute path="/payment" exact component={Payment} />
+        <UserRoute path="/user/wishlist" exact component={Wishlist} />
 
         {/* admin Routes */}
         <AdminRoute exact path="/admin/dashboard" component={Dashboard} />

@@ -133,7 +133,7 @@ function Navbar() {
               transition: "all 200ms linear",
             }}
           >
-            <Badge badgeContent={cart.length} color="secondary" max={5}>
+            <Badge badgeContent={cart.length} max={5}>
               <ShoppingCart />
             </Badge>
           </IconButton>

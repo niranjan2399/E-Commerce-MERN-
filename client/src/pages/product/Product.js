@@ -20,6 +20,7 @@ import ProductCard from "../../components/productCard/ProductCard";
 import { labels } from "../../utils/starLabels";
 import "./product.scss";
 import { handleAddToCart, removeFromCart } from "../../utils/cart";
+import axios from "../../axios";
 
 function Product() {
   const { user, cart } = useSelector((state) => ({ ...state }));
@@ -28,6 +29,7 @@ function Product() {
   const [value, setValue] = useState(0);
   const [hover, setHover] = useState(-1);
   const [showModel, setShowModel] = useState(false);
+  const [addToWishlist, setAddToWishlist] = useState(false);
   const dispatch = useDispatch();
   const [addedToCart, setAddedToCart] = useState(false);
   const slug = useParams().slug;
@@ -54,8 +56,27 @@ function Product() {
   }, [cart, product]);
 
   useEffect(() => {
-    if (user && product && product.ratings.length > 0) {
-      setValue(product.ratings.find((obj) => obj.postedBy === user._id).star);
+    user &&
+      product &&
+      (async () => {
+        const res = await axios.get("/user/wishlist", {
+          headers: {
+            authtoken: user.token,
+          },
+        });
+
+        const found = res.data.wishlist.find((p) => p._id === product._id);
+        console.log(found);
+        found && setAddToWishlist(true);
+      })();
+  }, [product, user]);
+
+  useEffect(() => {
+    if (user && product && product.ratings) {
+      const userRating = product.ratings.find(
+        (obj) => obj.postedBy === user._id
+      );
+      userRating && setValue(userRating.star);
     }
   }, [user, product]);
 
@@ -102,6 +123,40 @@ function Product() {
     setProduct(res.data);
     setShowModel(false);
     toast.success("Thanks for your review");
+  };
+
+  const handleAddToWishlist = async () => {
+    try {
+      if (addToWishlist === true) {
+        await axios.put(
+          `/user/wishlist/${product._id}`,
+          {},
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        );
+
+        setAddToWishlist(false);
+        toast.success("Removed from Wishlist");
+      } else {
+        await axios.post(
+          "/user/wishlist",
+          { productId: product._id },
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        );
+
+        setAddToWishlist(true);
+        toast.success("Product added to Wishlist");
+      }
+    } catch (err) {
+      toast.error("Unable to complete Request!!");
+    }
   };
 
   return (
@@ -162,25 +217,29 @@ function Product() {
                     <li>
                       Price<span>${product.price}</span>
                     </li>
-                    <li>
-                      Category
-                      <Link
-                        className="pdContainer__infoLink"
-                        to={`/category/${product.category.slug}`}
-                      >
-                        <span>{product.category.name}</span>
-                      </Link>
-                    </li>
-                    <li>
-                      Sub Categories
-                      {product.subs.map((sub) => (
+                    {product.category && (
+                      <li>
+                        Category
                         <Link
                           className="pdContainer__infoLink"
-                          to={`/subcategory/${sub.slug}`}
+                          to={`/category/${product.category.slug}`}
                         >
-                          <span>{sub.name}</span>
+                          <span>{product.category.name}</span>
                         </Link>
-                      ))}
+                      </li>
+                    )}
+                    <li>
+                      Sub Categories
+                      {product.subs &&
+                        product.subs.map((sub) => (
+                          <Link
+                            className="pdContainer__infoLink"
+                            to={`/subcategory/${sub.slug}`}
+                            key={sub._id}
+                          >
+                            <span>{sub.name}</span>
+                          </Link>
+                        ))}
                     </li>
                     <li>
                       Shipping<span>{product.shipping}</span>
@@ -188,17 +247,18 @@ function Product() {
                     <li>
                       Colors
                       <div>
-                        {product.color.map((clr) => {
-                          return (
-                            <div key={clr}>
-                              <span
-                                style={{
-                                  backgroundColor: `${colors[clr]}`,
-                                }}
-                              ></span>
-                            </div>
-                          );
-                        })}
+                        {product.color &&
+                          product.color.map((clr) => {
+                            return (
+                              <div key={clr}>
+                                <span
+                                  style={{
+                                    backgroundColor: `${colors[clr]}`,
+                                  }}
+                                ></span>
+                              </div>
+                            );
+                          })}
                       </div>
                     </li>
                     <li>
@@ -225,8 +285,9 @@ function Product() {
                     <StarOutline className="icon" />
                     {user ? "Leave a Rating" : "Login to leave Rating"}
                   </button>
-                  <button>
-                    <FavoriteBorder className="icon" /> Add to Wishlist
+                  <button onClick={handleAddToWishlist}>
+                    <FavoriteBorder className="icon" />
+                    {addToWishlist ? "Added to Wishlist" : "Add to Wishlist"}
                   </button>
                 </div>
               </div>

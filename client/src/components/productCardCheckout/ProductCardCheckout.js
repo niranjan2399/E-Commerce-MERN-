@@ -1,8 +1,8 @@
 import { IconButton } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
-import ModalImage from "react-modal-image";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { removeFromCart } from "../../utils/cart";
 import { getProduct } from "../../utils/product";
@@ -73,65 +73,108 @@ const ProductCardCheckout = ({ product }) => {
   };
 
   const handleDelete = () => {
-    removeFromCart(product, user, dispatch);
+    let cart = [];
+
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("cart")) {
+        cart = JSON.parse(localStorage.getItem("cart"));
+      }
+
+      cart = cart.filter((p) => {
+        return p._id !== product._id;
+      });
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: cart,
+      });
+    }
   };
 
   return (
-    <tbody>
-      <tr>
-        <td>
-          <div className="modal" style={{ width: "6.25rem", height: "auto" }}>
-            <ModalImage
-              small={product.images[0].url}
-              large={product.images[0].url}
-              hideZoom={true}
-            />
-          </div>
-        </td>
-        <td>{product.title}</td>
-        <td>${product.price}</td>
-        <td>
-          <select name="color" value={color} onChange={handleColorChange}>
-            {product.color ? (
-              <option value={product.color}>{product.color}</option>
-            ) : (
-              <option value="" hidden>
-                Select Color
-              </option>
-            )}
-            {colors &&
-              colors
-                .filter((color) => color !== product.color)
-                .map((color, i) => {
-                  return (
-                    <option key={i} value={color}>
-                      {color}
-                    </option>
-                  );
-                })}
-          </select>
-        </td>
-        <td>
-          <input
-            type="number"
-            name="count"
-            value={count}
-            min={1}
-            max={product.quantity}
-            onChange={handleCount}
-          />
-        </td>
-        <td>{product.shipping}</td>
-        <td>
-          <IconButton
-            onClick={handleDelete}
-            style={{ width: "2.5rem", height: "2.5rem" }}
+    <div className="pcCheckout">
+      <Link to={`/product/${product.slug}`}>
+        <div className="modal">
+          <img src={product.images[0].url} alt="" />
+        </div>
+      </Link>
+      <div className="pcCheckout__container">
+        <div className="pcCheckout__Title">
+          <Link
+            style={{
+              textDecoration: "none",
+              color: "black",
+              fontWeight: "500",
+            }}
+            to={`/product/${product.slug}`}
           >
-            <Delete style={{ color: "#ff7675" }} />
-          </IconButton>
-        </td>
-      </tr>
-    </tbody>
+            {product.title.slice(0, 20) +
+              (product.title.length > 20 ? "..." : "")}
+          </Link>
+          <div className="pcCheckout__delete" onClick={handleDelete}>
+            <Delete className="icon" />
+          </div>
+        </div>
+        <span className="price">${product.price}</span>
+        <div className="pcCheckout__details">
+          <div className="pcCheckout__detail"></div>
+          <div className="pcCheckout__detail">
+            <span
+              style={{ fontWeight: "500", fontSize: ".8rem", color: "#2C3A47" }}
+            >
+              <label htmlFor="color">Color: </label>
+            </span>
+            <div>
+              <select name="color" value={color} onChange={handleColorChange}>
+                {product.color ? (
+                  <option value={product.color}>{product.color}</option>
+                ) : (
+                  <option value="" hidden>
+                    Select Color
+                  </option>
+                )}
+                {colors &&
+                  colors
+                    .filter((color) => color !== product.color)
+                    .map((color, i) => {
+                      return (
+                        <option key={i} value={color}>
+                          {color}
+                        </option>
+                      );
+                    })}
+              </select>
+            </div>
+          </div>
+          <div className="pcCheckout__detail">
+            <span
+              style={{ fontWeight: "500", fontSize: ".8rem", color: "#2C3A47" }}
+            >
+              <label htmlFor="count">Quantity: </label>
+            </span>
+            <div>
+              <input
+                type="number"
+                name="count"
+                value={count}
+                min={1}
+                max={product.quantity}
+                onChange={handleCount}
+              />
+            </div>
+          </div>
+          <div className="pcCheckout__detail">
+            <span
+              style={{ fontWeight: "500", fontSize: ".8rem", color: "#2C3A47" }}
+            >
+              Shipping:{" "}
+            </span>
+            <span>{product.shipping}</span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

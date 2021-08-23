@@ -1,0 +1,211 @@
+.checkout {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  padding: 2rem;
+  gap: 1rem;
+  width: 100%;
+
+  .checkout__left {
+    border-radius: 0.25rem;
+    border: 1px solid #eeeeee;
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+
+    .checkout__leftTop {
+      h3 {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eeeeee;
+        margin-bottom: 1rem;
+      }
+
+      .button {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+
+        button {
+          position: relative;
+          margin-top: 1rem;
+          padding: 0.65rem 2.5rem;
+          color: #fff;
+          transition: all 0.5s;
+          border: none;
+          background-color: transparent;
+          cursor: pointer;
+          font-weight: 700;
+          letter-spacing: 0.05rem;
+          z-index: 1;
+
+          &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #8167a9;
+            transition: all 0.3s;
+          }
+          &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0;
+            transition: all 0.3s;
+            border: 1px solid #8167a9;
+            transform: scale(1.2, 1.2);
+          }
+          &:hover {
+            color: #8167a9;
+            &::before {
+              opacity: 0;
+              transform: scale(0.5, 0.5);
+            }
+            &::after {
+              opacity: 1;
+              transform: scale(1, 1);
+            }
+          }
+        }
+      }
+    }
+
+    .checkout__leftBottom {
+      margin-top: 1.5rem;
+
+      h5 {
+        margin-bottom: 0.75rem;
+      }
+
+      div {
+        display: flex;
+        justify-content: space-around;
+
+        input {
+          padding: 0.45rem 0.5rem;
+          border-radius: 0.75rem;
+          width: 18rem;
+          background-color: #eeeeee;
+          border: none;
+          transition: all 200ms linear;
+
+          &:focus {
+            outline: none;
+            box-shadow: 0 0 1px 2px #8167a9;
+          }
+        }
+
+        button {
+          $button-bg: #8167a9;
+          padding-block: 0.65rem;
+          width: 5rem;
+          font-size: 0.8rem;
+          font-weight: 600;
+          display: inline-block;
+          background-color: $button-bg;
+          color: white;
+          border-radius: 0.25rem;
+          cursor: pointer;
+          position: relative;
+          transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+          box-shadow: 0 2px 25px rgba(#8167a9, 0.5);
+
+          &:focus {
+            outline: 0;
+          }
+
+          &:active {
+            transform: scale(0.9);
+            background-color: darken($button-bg, 15%);
+            box-shadow: 0 2px 25px rgba(#8167a9, 0.3);
+          }
+        }
+      }
+    }
+  }
+
+  .checkout__right {
+    border-radius: 0.25rem;
+    border: 1px solid #eeeeee;
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+
+    h2 {
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eeeeee;
+      margin-bottom: 1rem;
+    }
+
+    .checkout__totalProducts {
+      display: flex;
+      justify-content: space-between;
+      padding-inline: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    .checkout__details {
+      display: flex;
+      justify-content: space-between;
+      padding-inline: 0.5rem;
+      padding-block: 0.35rem;
+      font-size: 0.9rem;
+
+      &:nth-of-type(3) {
+        border-bottom: 1px solid #eeeeee;
+      }
+    }
+
+    .checkout__buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1rem;
+      width: 100%;
+
+      div {
+        display: flex;
+        align-items: center;
+        color: #c23616;
+        font-size: 0.7rem;
+      }
+
+      button {
+        $button-bg: #8167a9;
+        padding-block: 0.65rem;
+        width: 10rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+        background-color: $button-bg;
+        color: white;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        position: relative;
+        transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+
+        &:focus {
+          outline: 0;
+        }
+
+        &:enabled {
+          box-shadow: 0 2px 25px rgba(#8167a9, 0.5);
+
+          &:active {
+            transform: scale(0.9);
+            background-color: darken($button-bg, 15%);
+            box-shadow: 0 2px 25px rgba(#8167a9, 0.3);
+          }
+        }
+
+        &:disabled {
+          background-color: #ddd;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}

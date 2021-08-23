@@ -30,10 +30,10 @@ const Coupon = () => {
     try {
       await removeCoupon(couponId, user.token);
       setCoupons(coupons.filter((coupon) => coupon._id !== couponId));
-      toast.success("Coupon deleted successfully");
+      toast.success("Coupon Deleted Successfully");
     } catch (err) {
       console.log(err);
-      toast.error("Can't delete coupon!!");
+      toast.error("Can't Delete Coupon!!");
     }
   };
 
@@ -124,9 +124,9 @@ const CouponForm = ({ overlayRef, formRef, setCoupons }) => {
       setDiscount("");
       setCoupons((c) => [...c, newCoupon.data]);
 
-      toast.success("Coupon created successfully");
+      toast.success("Coupon Created Successfully");
     } catch (err) {
-      toast.error("Coupon creation failed");
+      toast.error("Coupon Creation Failed");
     }
   };
 

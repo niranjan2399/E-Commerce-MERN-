@@ -7,6 +7,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./checkout.scss";
 import { useHistory } from "react-router-dom";
+import { ErrorOutline } from "@material-ui/icons";
 
 const Checkout = () => {
   const [products, setProducts] = useState(null);
@@ -17,7 +18,7 @@ const Checkout = () => {
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(null);
   const [discountError, setDiscountError] = useState(false);
   const { user } = useSelector((state) => ({ ...state }));
-  const history = useHistory()
+  const history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -61,20 +62,24 @@ const Checkout = () => {
   };
 
   const saveAddress = async () => {
-    try {
-      await axios.post(
-        "/user/address",
-        { address },
-        {
-          headers: {
-            authtoken: user.token,
-          },
-        }
-      );
-      setAddressSaved(true);
-      toast.success("Address saved successfully");
-    } catch (err) {
-      toast.error("Unable to Save address");
+    if (address !== "") {
+      try {
+        await axios.post(
+          "/user/address",
+          { address },
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        );
+        setAddressSaved(true);
+        toast.success("Address saved successfully");
+      } catch (err) {
+        toast.error("Unable to Save address");
+      }
+    } else {
+      toast.error("Address Cannot Be Empty!!");
     }
   };
 
@@ -115,57 +120,75 @@ const Checkout = () => {
               value={address}
               onChange={(value) => setAddress(value)}
             />
-            <button onClick={saveAddress}>Save</button>
+            <div className="button">
+              <button onClick={saveAddress}>Save</button>
+            </div>
           </div>
           <div className="checkout__leftBottom">
             <h5>Got a Coupon?</h5>
-            <input
-              type="text"
-              placeholder="Coupon Code"
-              value={coupon}
-              onChange={(e) => {
-                setCoupon(e.target.value.toUpperCase());
-                setDiscountError(false);
-              }}
-            />
-            <button onClick={handleCoupon}>Apply</button>
-            {discountError && (
-              <span className="couponError">Invalid Coupon</span>
-            )}
+            <div>
+              <input
+                type="text"
+                {...(discountError
+                  ? { style: { ...{ boxShadow: "0 0 1px 2px #c23616" } } }
+                  : "")}
+                placeholder="Coupon Code"
+                value={coupon}
+                onChange={(e) => {
+                  setCoupon(e.target.value.toUpperCase());
+                  setDiscountError(false);
+                }}
+              />
+              <button onClick={handleCoupon}>Apply</button>
+            </div>
           </div>
         </div>
         <div className="checkout__right">
           {products && (
             <>
               <h2>Order Summary</h2>
-              <hr />
-              <p>Total Products {products.length}</p>
-              <hr />
+              <div className="checkout__totalProducts">
+                <span>Total Products</span> {products.length}
+              </div>
               {products.map((p, i) => {
                 return (
-                  <div key={i}>
-                    {p.product.title +
-                      "(" +
-                      p.color +
-                      ") * " +
-                      p.count +
-                      " = " +
-                      p.count * p.price}
+                  <div className="checkout__details" key={i}>
+                    <span>
+                      {p.product.title + "(" + p.color + ") * " + p.count}
+                    </span>
+                    <span>
+                      {(p.count * p.price).toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                      })}
+                    </span>
                   </div>
                 );
               })}
-              <hr />
-              <p>Cart Total: ${total}</p>
+              <div className="checkout__details">
+                <span>Cart Total</span>
+                {total.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                })}
+              </div>
               {totalAfterDiscount && (
-                <div>Coupon Applied: Total Payable: ${totalAfterDiscount} </div>
+                <div className="checkout__details">
+                  Coupon Applied: Total Payable:
+                  {totalAfterDiscount.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </div>
               )}
-              <div>
+              <div className="checkout__buttons">
                 <button
                   disabled={!addressSaved}
                   onClick={() => history.push("/payment")}
                 >
                   PLACE ORDER
                 </button>
+                {!addressSaved && <div>* address required</div>}
                 <br />
                 <button disabled={!products.length} onClick={emptyCart}>
                   EMPTY CART
