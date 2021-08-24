@@ -18,6 +18,7 @@ function Home() {
   const [categories, setCategories] = useState(null);
   const [subCategories, setSubCategories] = useState(null);
 
+
   useEffect(() => {
     (async () => {
       const res = await getAccordingly("createdAt", "desc", 4);

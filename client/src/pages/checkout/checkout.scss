@@ -1,6 +1,6 @@
 .checkout {
   display: grid;
-  grid-template-columns: repeat(2, auto);
+  grid-template-columns: repeat(2, 1fr);
   padding: 2rem;
   gap: 1rem;
   width: 100%;
@@ -129,6 +129,9 @@
   }
 
   .checkout__right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 0.25rem;
     border: 1px solid #eeeeee;
     padding: 1rem 1.5rem 1.5rem 1.5rem;
@@ -154,8 +157,14 @@
       padding-block: 0.35rem;
       font-size: 0.9rem;
 
-      &:nth-of-type(3) {
+      &.cart__total {
         border-bottom: 1px solid #eeeeee;
+      }
+
+      &.coupon__applied {
+        margin-top: 0.5rem;
+        text-align: center;
+        background-color: #55efc4;
       }
     }
 

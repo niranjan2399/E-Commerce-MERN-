@@ -8,6 +8,7 @@ import "react-quill/dist/quill.snow.css";
 import "./checkout.scss";
 import { useHistory } from "react-router-dom";
 import { ErrorOutline } from "@material-ui/icons";
+import { CircularProgress } from "@material-ui/core";
 
 const Checkout = () => {
   const [products, setProducts] = useState(null);
@@ -55,6 +56,8 @@ const Checkout = () => {
       setDiscountError(false);
       setTotalAfterDiscount(null);
       toast.info("Cart is Empty!! Continue Shopping");
+
+      history.push("/");
     } catch (err) {
       console.log(err);
       toast.error("Unable to complete request!!");
@@ -105,6 +108,7 @@ const Checkout = () => {
         type: "COUPON_APPLIED",
         payload: true,
       });
+      setCoupon("");
     }
   };
 
@@ -144,8 +148,8 @@ const Checkout = () => {
           </div>
         </div>
         <div className="checkout__right">
-          {products && (
-            <>
+          {products ? (
+            <div style={{ width: "100%" }}>
               <h2>Order Summary</h2>
               <div className="checkout__totalProducts">
                 <span>Total Products</span> {products.length}
@@ -165,7 +169,7 @@ const Checkout = () => {
                   </div>
                 );
               })}
-              <div className="checkout__details">
+              <div className="checkout__details cart__total">
                 <span>Cart Total</span>
                 {total.toLocaleString("en-US", {
                   style: "currency",
@@ -173,12 +177,14 @@ const Checkout = () => {
                 })}
               </div>
               {totalAfterDiscount && (
-                <div className="checkout__details">
+                <div className="checkout__details coupon__applied">
                   Coupon Applied: Total Payable:
-                  {totalAfterDiscount.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })}
+                  <span>
+                    {parseInt(totalAfterDiscount).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                  </span>
                 </div>
               )}
               <div className="checkout__buttons">
@@ -194,7 +200,11 @@ const Checkout = () => {
                   EMPTY CART
                 </button>
               </div>
-            </>
+            </div>
+          ) : (
+            <CircularProgress
+              style={{ width: "2.5rem", height: "2.5rem", color: "#8167a9" }}
+            />
           )}
         </div>
       </div>

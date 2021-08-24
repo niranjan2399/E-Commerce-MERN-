@@ -21,10 +21,13 @@ const Payment = () => {
   return (
     <>
       <Navbar />
-      <div>
+      <div className="payment">
         <Elements stripe={promise}>
-          <h2>Complete your purchase</h2>
-          <StripeCheckout />
+          <div className="element">
+            <h3>Complete your purchase</h3>
+            <p>* Enter card no 4242 4242 4242 4242 to try payment</p>
+            <StripeCheckout />
+          </div>
         </Elements>
       </div>
     </>
@@ -40,7 +43,6 @@ const StripeCheckout = () => {
 
   const [cartTotal, setCartTotal] = useState(0);
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
-  const [payable, setPayable] = useState(0);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -61,7 +63,6 @@ const StripeCheckout = () => {
 
       setCartTotal(res.data.cartTotal);
       setTotalAfterDiscount(res.data.totalAfterDiscount);
-      setPayable(res.data.payable);
       setClientSecret(res.data.clientSecret);
     })();
   }, [user.token, coupon]);
@@ -130,9 +131,9 @@ const StripeCheckout = () => {
         }
       }
 
+      setSuceeded(true);
       setError(null);
       setProcessing(false);
-      setSuceeded(true);
     }
   };
 
@@ -140,17 +141,24 @@ const StripeCheckout = () => {
     setDisabled(e.empty);
     setError(e.error ? e.error.message : "");
   };
+  console.log(suceeded);
 
   return (
     <>
-      {!suceeded && totalAfterDiscount !== undefined ? (
-        <p>Total after discount: ${totalAfterDiscount}</p>
+      {!suceeded && totalAfterDiscount && totalAfterDiscount !== undefined ? (
+        <div className="coupon__message success">
+          Total after discount:<span> ${totalAfterDiscount}</span>
+        </div>
       ) : (
-        <p>No coupon applied</p>
+        <div className="coupon__message error">No coupon applied</div>
       )}
-      <div>
-        <div>Total: ${cartTotal}</div>
-        <div>Total Payable: ${totalAfterDiscount || cartTotal}</div>
+      <div className="coupon__message details">
+        <div>
+          Total: <span>${cartTotal}</span>
+        </div>
+        <div>
+          Total Payable:<span> ${totalAfterDiscount || cartTotal}</span>
+        </div>
       </div>
       <form onSubmit={handleSubmit}>
         <CardElement
@@ -165,7 +173,9 @@ const StripeCheckout = () => {
         >
           {processing ? (
             <div>
-              <CircularProgress style={{ width: "1rem", height: "1rem" }} />
+              <CircularProgress
+                style={{ width: "1rem", height: "1rem", color: "white" }}
+              />
             </div>
           ) : suceeded ? (
             <DoneOutline style={{ fontSize: "1rem" }} />
@@ -174,9 +184,9 @@ const StripeCheckout = () => {
           )}
         </button>
       </form>
-      {error && <div>{error}</div>}
+      {error && <div className="card__error">{error}</div>}
       {suceeded && (
-        <div>
+        <div className="lastMessage">
           Payment Successful.{" "}
           <Link to="/user/history">See it in your purchase history.</Link>
         </div>
