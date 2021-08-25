@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, handleAddToCart } from "../../utils/cart";
 import "./productCard.scss";
 
-function ProductCard({ product, setProducts = null }) {
+function ProductCard({ product, setProducts = null, refCard }) {
   const path = useHistory().location.pathname;
   const { user, cart } = useSelector((state) => ({ ...state }));
   const [addedToCart, setAddedToCart] = useState(false);
@@ -68,7 +68,7 @@ function ProductCard({ product, setProducts = null }) {
   };
 
   return (
-    <div className="product">
+    <div className="product" ref={refCard}>
       <div className="product__make3D">
         <div className="product__front" ref={front}>
           <div className="product__shadow"></div>

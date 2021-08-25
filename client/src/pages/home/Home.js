@@ -10,6 +10,7 @@ import { NavigateBefore, NavigateNext } from "@material-ui/icons";
 import CategoryList from "../../components/category/CategoryList";
 import { getCategories } from "../../utils/category";
 import { getSubs } from "../../utils/sub";
+import HomePageScrollSection from "../../components/homePageScrollSection/HomePageScrollSection";
 
 function Home() {
   const { user } = useSelector((state) => ({ ...state }));
@@ -17,7 +18,6 @@ function Home() {
   const [bestSellers, setBestSellers] = useState(null);
   const [categories, setCategories] = useState(null);
   const [subCategories, setSubCategories] = useState(null);
-
 
   useEffect(() => {
     (async () => {
@@ -47,82 +47,14 @@ function Home() {
     })();
   }, []);
 
-  const scroll = (e) => {
-    // const section = e.currentTarget.dataset.section;
-  };
-
   return (
     <>
       <Navbar />
       <div className="homeContainer">
         {/* {user && user.role === "admin" ? <AdminSidebar /> : <UserSidebar />} */}
         <div className="homeContainer__main">
-          {newProducts && (
-            <section className="homeContainer__section">
-              <div className="homeContainer__sectionTop">New Arrivals</div>
-              <div className="homeContainer__sectionBottom">
-                <div
-                  className="homeContainer__scrollButtons"
-                  data-type="left"
-                  data-section="newProduct"
-                  onClick={scroll}
-                >
-                  <NavigateBefore className="icons" />
-                </div>
-                <div className="homeContainer__sectionWrapper">
-                  {newProducts.map((product) => {
-                    return <ProductCard product={product} key={product.slug} />;
-                  })}
-                  {newProducts.map((product) => {
-                    return <ProductCard product={product} key={product.slug} />;
-                  })}
-                  {newProducts.map((product) => {
-                    return <ProductCard product={product} key={product.slug} />;
-                  })}
-                </div>
-                <div
-                  className="homeContainer__scrollButtons"
-                  data-type="right"
-                  data-section="bestProduct"
-                  onClick={scroll}
-                >
-                  <NavigateNext className="icons" />
-                </div>
-              </div>
-            </section>
-          )}
-          {bestSellers && (
-            <section className="homeContainer__section">
-              <div className="homeContainer__sectionTop">Best Sellers</div>
-              <div className="homeContainer__sectionBottom">
-                <div
-                  className="homeContainer__scrollButtons"
-                  data-type="left"
-                  onClick={scroll}
-                >
-                  <NavigateBefore className="icons" />
-                </div>
-                <div className="homeContainer__sectionWrapper">
-                  {bestSellers.map((product) => {
-                    return <ProductCard product={product} key={product.slug} />;
-                  })}
-                  {bestSellers.map((product) => {
-                    return <ProductCard product={product} key={product.slug} />;
-                  })}
-                  {bestSellers.map((product) => {
-                    return <ProductCard product={product} key={product.slug} />;
-                  })}
-                </div>
-                <div
-                  className="homeContainer__scrollButtons"
-                  data-type="right"
-                  onClick={scroll}
-                >
-                  <NavigateNext className="icons" />
-                </div>
-              </div>
-            </section>
-          )}
+          {newProducts && <HomePageScrollSection products={newProducts} title='New Products'/>}
+          {bestSellers && <HomePageScrollSection products={bestSellers} title='Best Sellers'/>}
           {categories && (
             <section className="homeContainer__section">
               <div className="homeContainer__sectionTop">Categories</div>

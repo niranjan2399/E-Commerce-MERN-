@@ -1,5 +1,5 @@
 import axios from "../../axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,12 +14,35 @@ const Cart = () => {
   const [copied, setCopied] = useState([]);
   const { user, cart } = useSelector((state) => ({ ...state }));
   const history = useHistory();
+  const [top, setTop] = useState(true);
+  const floatButton = useRef();
 
   useEffect(() => {
     (async () => {
       const res = await axios.get("/coupons");
       setCoupons(res.data);
     })();
+  }, []);
+
+  useEffect(() => {
+    const scrollFunction = () => {
+      if (
+        document.body.clientHeight - window.innerHeight ===
+        Math.round(window.scrollY)
+      ) {
+        setTop(false);
+        floatButton.current.setAttribute("style", "transform: rotateZ(180deg)");
+      } else if (window.scrollY === 0) {
+        setTop(true);
+        floatButton.current.removeAttribute("style");
+      }
+    };
+
+    document.addEventListener("scroll", scrollFunction);
+
+    return () => {
+      document.removeEventListener("scroll", scrollFunction);
+    };
   }, []);
 
   const product = () => {
@@ -77,6 +100,25 @@ const Cart = () => {
     setCopied([...copied, couponName]);
   };
 
+  const handleScroll = () => {
+    if (top) {
+      floatButton.current.setAttribute("style", "transform: rotateZ(180deg)");
+      window.scroll({
+        left: 0,
+        top: document.body.scrollHeight,
+        behavior: "smooth",
+      });
+    } else {
+      floatButton.current.removeAttribute("style");
+      window.scroll({
+        left: 0,
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+    setTop(!top);
+  };
+
   return (
     <>
       <Navbar />
@@ -84,15 +126,9 @@ const Cart = () => {
         <div className="cartContainer">
           <div
             className="cartContainer__bottomArrowFloat"
-            onClick={() =>
-              window.scroll({
-                left: 0,
-                top: document.body.scrollHeight,
-                behavior: "smooth",
-              })
-            }
+            onClick={handleScroll}
           >
-            <ArrowDownwardOutlined className="icon" />
+            <ArrowDownwardOutlined className="icon" ref={floatButton} />
           </div>
           <div className="cartContainer__left">{showCartItems()}</div>
           {cart.length && (

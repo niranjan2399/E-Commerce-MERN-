@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useHistory, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Rating } from "@material-ui/lab";
@@ -20,6 +20,7 @@ import ProductCard from "../../components/productCard/ProductCard";
 import { labels } from "../../utils/starLabels";
 import "./product.scss";
 import { handleAddToCart, removeFromCart } from "../../utils/cart";
+import { formHide } from "../../utils/animate";
 import axios from "../../axios";
 
 function Product() {
@@ -28,12 +29,13 @@ function Product() {
   const [related, setRelated] = useState(null);
   const [value, setValue] = useState(0);
   const [hover, setHover] = useState(-1);
-  const [showModel, setShowModel] = useState(false);
   const [addToWishlist, setAddToWishlist] = useState(false);
   const dispatch = useDispatch();
   const [addedToCart, setAddedToCart] = useState(false);
   const slug = useParams().slug;
   const history = useHistory();
+  const overlay = useRef();
+  const form = useRef();
 
   useEffect(() => {
     (async () => {
@@ -102,7 +104,9 @@ function Product() {
 
   const handleRatingModal = () => {
     if (user) {
-      setShowModel(true);
+      overlay.current.classList.add("reveal");
+      form.current.classList.add("reveal");
+      document.body.style.overflowY = "hidden";
     } else {
       history.push({
         pathname: "/login",
@@ -121,7 +125,6 @@ function Product() {
     await setRatings(value, product._id, user.token);
     const res = await getProduct(slug);
     setProduct(res.data);
-    setShowModel(false);
     toast.success("Thanks for your review");
   };
 
@@ -159,21 +162,22 @@ function Product() {
     }
   };
 
+  const handleHide = () => {
+    formHide(overlay, form);
+    document.body.style.overflowY = "auto";
+  };
+
   return (
     <>
       <Navbar />
       <div className="pdContainer">
-        <Overlay className="reveal" />
+        <Overlay className="reveal" overlayRef={overlay} formRef={form} />
         {product ? (
           <div className="pdContainer__main">
-            <div
-              className={
-                "pdContainer__ratingModel" + (showModel ? " show" : "")
-              }
-            >
+            <div className={"pdContainer__ratingModel"} ref={form}>
               <div className="pdContainer__ratingTop">
                 <span>Leave a Rating</span>
-                <IconButton onClick={() => setShowModel(false)}>
+                <IconButton onClick={handleHide}>
                   <Close />
                 </IconButton>
               </div>
@@ -200,7 +204,7 @@ function Product() {
                 )}
               </div>
               <div className="pdContainer__ratingButtons">
-                <button onClick={() => setShowModel(false)}>Cancel</button>
+                <button onClick={handleHide}>Cancel</button>
                 <button onClick={submitStarRating}>Submit</button>
               </div>
             </div>

@@ -1,17 +1,14 @@
-import { IconButton } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Delete } from "@material-ui/icons";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { removeFromCart } from "../../utils/cart";
 import { getProduct } from "../../utils/product";
 
 const ProductCardCheckout = ({ product }) => {
   const [color, setColor] = useState(product.color ? product.color : "");
   const [count, setCount] = useState(product.count);
   const [colors, setColors] = useState();
-  const { user } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
 
   useEffect(() => {

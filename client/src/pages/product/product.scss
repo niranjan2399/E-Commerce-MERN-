@@ -25,14 +25,21 @@
       top: 10rem;
       left: 50%;
       z-index: 2;
-      opacity: 0;
-      transform: translateX(-50%) scale(0.5);
+      transform: translateX(-50%) scale(0);
       transition: all 200ms ease-in;
 
-      &.show {
-        transform: translateX(-50%) scale(1);
-        opacity: 1;
+      &.reveal {
+        animation: zoomIn 0.5s 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+
+        &.hide {
+          animation: zoomOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
       }
+
+      // &.show {
+      //   transform: translateX(-50%) scale(1);
+      //   opacity: 1;
+      // }
 
       .pdContainer__ratingTop {
         display: flex;
