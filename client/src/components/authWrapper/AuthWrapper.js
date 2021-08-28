@@ -18,9 +18,13 @@ function AuthWrapper({ children }) {
             <Link to="/register" className="wrapperContainer__bottomButton">
               Create new E.C account
             </Link>
-          ) : (
+          ) : path === "/register" ? (
             <Link to="/login" className="wrapperContainer__bottomButton">
               Already a user? Login
+            </Link>
+          ) : (
+            <Link to="/login" className="wrapperContainer__bottomButton">
+              Back
             </Link>
           ))}
       </div>

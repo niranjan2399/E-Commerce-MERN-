@@ -3,7 +3,8 @@ import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { removeProduct } from "../../utils/product";
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromCart, handleAddToCart } from "../../utils/cart";
+import { ChevronLeft, ChevronRight, Close } from "@material-ui/icons";
+import { handleAddToCart } from "../../utils/cart";
 import "./productCard.scss";
 
 function ProductCard({ product, setProducts = null, refCard }) {
@@ -18,13 +19,25 @@ function ProductCard({ product, setProducts = null, refCard }) {
     Black: "#393c45",
     Silver: "#C0C0C0",
   };
+  const container = useRef();
   const front = useRef();
   const back = useRef();
+  const ul = useRef();
 
   useEffect(() => {
     cart &&
       setAddedToCart(cart.some((p) => p._id === product._id) ? true : false);
   }, [cart, product._id]);
+
+  useEffect(() => {
+    const carousel = ul.current;
+    const width = carousel.offsetWidth;
+    console.log(width);
+    const slides = Array.from(carousel.children);
+    slides.forEach((slide, index) => {
+      slide.style.left = width * index + "px";
+    });
+  }, []);
 
   const deleteProduct = async (e) => {
     try {
@@ -40,7 +53,21 @@ function ProductCard({ product, setProducts = null, refCard }) {
   };
 
   const revealBack = () => {
-    console.log("clicked");
+    container.current.classList.add("back");
+
+    setTimeout(() => {
+      front.current.classList.add("hide");
+      back.current.classList.add("reveal");
+    }, 150);
+  };
+
+  const revealFront = () => {
+    container.current.classList.remove("back");
+
+    setTimeout(() => {
+      front.current.classList.remove("hide");
+      back.current.classList.remove("reveal");
+    }, 150);
   };
 
   const handleAdd = () => {
@@ -67,9 +94,22 @@ function ProductCard({ product, setProducts = null, refCard }) {
     }
   };
 
+  const handleCarousel = (e) => {
+    const carousel = ul.current;
+    const selectedElement = carousel.querySelector(".selected");
+    const nextElement = selectedElement.nextElementSibling;
+    const leftNextSibling = nextElement.style.left;
+    console.log(leftNextSibling);
+    // const position = e.currentTarget.dataset.position;
+    // if (position === "right") {
+    //   carousel.style.transform = "translateX(" + leftNextSibling + ")";
+    // } else {
+    // }
+  };
+
   return (
     <div className="product" ref={refCard}>
-      <div className="product__make3D">
+      <div className="product__make3D" ref={container}>
         <div className="product__front" ref={front}>
           <div className="product__shadow"></div>
           <img src={product.images[0].url} alt="" />
@@ -97,7 +137,6 @@ function ProductCard({ product, setProducts = null, refCard }) {
               </button>
             </div>
           )}
-          {/* <div className="stats"> */}
           <div
             className={
               "product__statsContainer" +
@@ -162,14 +201,13 @@ function ProductCard({ product, setProducts = null, refCard }) {
               )}
             </div>
           </div>
-          {/* </div> */}
         </div>
 
         <div className="product__back" ref={back}>
           <div className="shadow"></div>
           <div className="carousel">
-            <ul className="carousel-container">
-              <li>
+            <ul className="carousel__container" ref={ul}>
+              <li className="selected">
                 <img
                   src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/1.jpg"
                   alt=""
@@ -189,19 +227,28 @@ function ProductCard({ product, setProducts = null, refCard }) {
               </li>
             </ul>
             <div className="arrows-perspective">
-              <div className="carouselPrev">
-                <div className="y"></div>
-                <div className="x"></div>
+              <div
+                className="carouselPrev"
+                data-position="left"
+                onClick={handleCarousel}
+              >
+                <ChevronLeft
+                  style={{ fontSize: "2.125rem", color: "#8167a9" }}
+                />
               </div>
-              <div className="carouselNext">
-                <div className="y"></div>
-                <div className="x"></div>
+              <div
+                className="carouselNext"
+                data-position="right"
+                onClick={handleCarousel}
+              >
+                <ChevronRight
+                  style={{ fontSize: "2.125rem", color: "#8167a9" }}
+                />
               </div>
             </div>
           </div>
-          <div className="flip-back">
-            <div className="cy"></div>
-            <div className="cx"></div>
+          <div className="flip-back" onClick={revealFront}>
+            <Close className="icon" />
           </div>
         </div>
       </div>
