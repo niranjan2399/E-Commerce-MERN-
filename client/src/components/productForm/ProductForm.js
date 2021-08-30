@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import CustomCheckbox from "../customCheckbox/CustomCheckbox";
 import CustomSelect from "../customSelect/CustomSelect";
 
 function ProductForm({ values, handleSubmit, handleChange, setValues }) {
@@ -6,6 +7,7 @@ function ProductForm({ values, handleSubmit, handleChange, setValues }) {
     title,
     description,
     price,
+    category,
     categories,
     shipping,
     quantity,
@@ -13,10 +15,23 @@ function ProductForm({ values, handleSubmit, handleChange, setValues }) {
     subListAll,
     sizes,
   } = values;
-  const [shippingValue, setShippingValue] = useState(values.shipping);
+  const [shippingValue, setShippingValue] = useState();
+  const [categoryValue, setCategoryValue] = useState();
+
+  useEffect(() => {
+    if (values) {
+      setShippingValue(shipping);
+      setCategoryValue(category._id);
+    }
+  }, [values, category, shipping]);
 
   const handleCustomSelect = (e) => {
-    setShippingValue(e.currentTarget.dataset.value);
+    const type = e.currentTarget.dataset.name;
+    if (type === "shipping") {
+      setShippingValue(e.currentTarget.dataset.value);
+    } else if (type === "category") {
+      setCategoryValue(e.currentTarget.dataset.value);
+    }
     setValues({
       ...values,
       [e.currentTarget.dataset.name]: e.currentTarget.dataset.value,
@@ -45,17 +60,10 @@ function ProductForm({ values, handleSubmit, handleChange, setValues }) {
       <label htmlFor="price">Price</label>
       <input type="number" name="price" value={price} onChange={handleChange} />
       <label htmlFor="shipping">Shipping</label>
-      {/* <select name="shipping" value={values.shipping} onChange={handleChange}>
-        <option disabled value="" hidden>
-          Please Select
-        </option>
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-      </select> */}
       <CustomSelect
         options={[
-          { value: "Yes", name: "shipping" },
-          { value: "No", name: "shipping" },
+          { value: "Yes", title: "Yes", name: "shipping" },
+          { value: "No", title: "No", name: "shipping" },
         ]}
         handleCustomSelect={handleCustomSelect}
         value={shippingValue}
@@ -67,76 +75,105 @@ function ProductForm({ values, handleSubmit, handleChange, setValues }) {
         value={quantity}
         onChange={handleChange}
       />
-      <label htmlFor="color">Colors</label>
-      <select
-        name="color"
+      <label>Colors</label>
+      {/* <select
         multiple
         value={values.color}
         onChange={handleChange}
         required
-        data-identifier="multipleColor"
-      >
-        <option value="">Please Select</option>
+        data-
+      > */}
+      {/* <option value="">Please Select</option> */}
+      <div className="checkbox__div">
         {colors.map((color, i) => {
           return (
-            <option value={color} key={i}>
-              {color}
-            </option>
+            <CustomCheckbox
+              key={i}
+              label={color}
+              name="color"
+              value={color}
+              identifier="multipleColor"
+              onChange={handleChange}
+            />
+            // <option value={color} key={i}>
+            //   {color}
+            // </option>
           );
         })}
-      </select>
+      </div>
+      {/* </select> */}
       <label htmlFor="size">Size</label>
-      <select
-        name="size"
+      {/* <select
         multiple
         value={values.size}
         onChange={handleChange}
         required
-        data-identifier="multipleSize"
-      >
-        <option value="">Please Select</option>
+        data-
+        >
+      <option value="">Please Select</option> */}
+      <div className="checkbox__div">
         {sizes.map((size, i) => {
           return (
-            <option value={size} key={i}>
-              {size}
-            </option>
+            <CustomCheckbox
+              name="size"
+              label={size}
+              value={size}
+              key={i}
+              onChange={handleChange}
+              identifier="multipleSize"
+            />
+            // <option value={size} key={i}>
+            //   {size}
+            // </option>
           );
         })}
-      </select>
-      <label htmlFor="category">Category</label>
-      <select name="category" value={values.category} onChange={handleChange}>
-        <option hidden disabled value="">
-          Please Select
-        </option>
-        {categories &&
-          categories.map((category, i) => {
-            return (
-              <option value={category._id} key={i}>
-                {category.name}
-              </option>
-            );
-          })}
-      </select>
+      </div>
+      {/* </select> */}
+      {categories && (
+        <div>
+          <label>Categories</label>
+          <CustomSelect
+            options={categories.map((category) => {
+              return {
+                value: `${category._id}`,
+                title: `${category.name}`,
+                name: "category",
+              };
+            })}
+            handleCustomSelect={handleCustomSelect}
+            value={categoryValue}
+          />
+        </div>
+      )}
       {subListAll && (
         <>
           <label htmlFor="subs">Sub Category</label>
-          <select
-            name="subs"
+          {/* <select
             value={values.subs}
             className="npContainer__subs"
             multiple
             onChange={handleChange}
-            data-identifier="multipleSubs"
-          >
-            <option value="">Please Select</option>
+            data-
+            >
+          <option value="">Please Select</option> */}
+          <div className="checkbox__div checkbox__div--sub">
             {subListAll.map((sub, i) => {
               return (
-                <option value={sub._id} key={i}>
-                  {sub.name}
-                </option>
+                <CustomCheckbox
+                  label={sub.name}
+                  name="subs"
+                  value={sub._id}
+                  identifier="multipleSubs"
+                  onChange={handleChange}
+                  key={i}
+                />
+                // <option value={sub._id} key={i}>
+                //   {sub.name}
+                // </option>
               );
             })}
-          </select>
+          </div>
+          {/* </select> */}
         </>
       )}
       <button type="submit">Save Product</button>

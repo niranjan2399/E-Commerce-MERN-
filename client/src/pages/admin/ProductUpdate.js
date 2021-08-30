@@ -60,31 +60,38 @@ function ProductUpdate() {
   useEffect(() => {
     values.category &&
       (async () => {
-        const res = await getForCategory(values.category);
+        const res = await getForCategory(values.category._id);
         setValues((pre) => {
           return { ...pre, subListAll: res.data };
         });
       })();
+
+    document
+      .querySelector(".checkbox__div--sub")
+      .scrollIntoView({ behavior: "smooth" });
   }, [values.category]);
 
   const handleChange = (e) => {
-    const newValues = [];
     const tempId = e.target.dataset.identifier;
-    if (tempId === "multipleColor") {
-      [...e.target.selectedOptions].forEach((selected) => {
-        newValues.push(selected.value);
-      });
-      setValues({ ...values, color: newValues });
-    } else if (tempId === "multipleSize") {
-      [...e.target.selectedOptions].forEach((selected) => {
-        newValues.push(selected.value);
-      });
-      setValues({ ...values, size: newValues });
-    } else if (tempId === "multipleSubs") {
-      [...e.target.selectedOptions].forEach((selected) => {
-        newValues.push(selected.value);
-      });
-      setValues({ ...values, subs: newValues });
+    if (tempId) {
+      if (e.currentTarget.checked) {
+        setValues({
+          ...values,
+          [e.currentTarget.name]: [
+            ...values[`${e.currentTarget.name}`],
+            e.currentTarget.value,
+          ],
+        });
+      } else {
+        setValues({
+          ...values,
+          [e.currentTarget.name]: values[`${e.currentTarget.name}`].filter(
+            (val) => {
+              return val !== e.currentTarget.value;
+            }
+          ),
+        });
+      }
     } else {
       setValues({ ...values, [e.target.name]: e.target.value });
     }
@@ -171,6 +178,7 @@ function ProductUpdate() {
               values={values}
               handleChange={handleChange}
               handleSubmit={handleUpdate}
+              setValues={setValues}
             />
           </div>
         </div>

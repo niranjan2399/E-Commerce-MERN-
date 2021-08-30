@@ -7,7 +7,6 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./checkout.scss";
 import { useHistory } from "react-router-dom";
-import { ErrorOutline } from "@material-ui/icons";
 import { CircularProgress } from "@material-ui/core";
 
 const Checkout = () => {

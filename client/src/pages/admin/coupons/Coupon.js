@@ -23,6 +23,10 @@ const Coupon = () => {
       const coupons = await listCoupons();
       setCoupons(coupons.data);
     })();
+
+    return () => {
+      setCoupons(null);
+    };
   }, []);
 
   const handleDelete = async (e) => {

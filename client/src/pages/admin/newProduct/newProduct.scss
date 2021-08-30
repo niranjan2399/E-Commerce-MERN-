@@ -116,6 +116,12 @@
           margin-bottom: 0.35rem;
         }
 
+        .checkbox__div {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          margin-block: 0.5rem 1rem;
+        }
+
         input,
         textarea {
           width: 100%;

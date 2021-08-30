@@ -68,7 +68,6 @@ function Product() {
         });
 
         const found = res.data.wishlist.find((p) => p._id === product._id);
-        console.log(found);
         found && setAddToWishlist(true);
       })();
   }, [product, user]);

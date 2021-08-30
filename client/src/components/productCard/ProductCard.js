@@ -11,6 +11,7 @@ function ProductCard({ product, setProducts = null, refCard }) {
   const path = useHistory().location.pathname;
   const { user, cart } = useSelector((state) => ({ ...state }));
   const [addedToCart, setAddedToCart] = useState(false);
+  const [swiped, setSwiped] = useState(0);
   const dispatch = useDispatch();
   const colors = {
     Blue: "#6E8CD5",
@@ -28,16 +29,6 @@ function ProductCard({ product, setProducts = null, refCard }) {
     cart &&
       setAddedToCart(cart.some((p) => p._id === product._id) ? true : false);
   }, [cart, product._id]);
-
-  useEffect(() => {
-    const carousel = ul.current;
-    const width = carousel.offsetWidth;
-    console.log(width);
-    const slides = Array.from(carousel.children);
-    slides.forEach((slide, index) => {
-      slide.style.left = width * index + "px";
-    });
-  }, []);
 
   const deleteProduct = async (e) => {
     try {
@@ -96,15 +87,17 @@ function ProductCard({ product, setProducts = null, refCard }) {
 
   const handleCarousel = (e) => {
     const carousel = ul.current;
-    const selectedElement = carousel.querySelector(".selected");
-    const nextElement = selectedElement.nextElementSibling;
-    const leftNextSibling = nextElement.style.left;
-    console.log(leftNextSibling);
-    // const position = e.currentTarget.dataset.position;
-    // if (position === "right") {
-    //   carousel.style.transform = "translateX(" + leftNextSibling + ")";
-    // } else {
-    // }
+    const widthCarousel = carousel.parentElement.offsetWidth;
+    const position = e.currentTarget.dataset.position;
+    if (position === "right") {
+      carousel.style.transform =
+        "translateX(-" + (swiped + 1) * widthCarousel + "px)";
+      setSwiped((s) => s + 1);
+    } else {
+      carousel.style.transform =
+        "translateX(-" + (swiped - 1) * widthCarousel + "px)";
+      setSwiped((s) => s - 1);
+    }
   };
 
   return (
@@ -231,6 +224,7 @@ function ProductCard({ product, setProducts = null, refCard }) {
                 className="carouselPrev"
                 data-position="left"
                 onClick={handleCarousel}
+                {...(swiped === 0 ? { style: { display: "none" } } : {})}
               >
                 <ChevronLeft
                   style={{ fontSize: "2.125rem", color: "#8167a9" }}
@@ -240,6 +234,9 @@ function ProductCard({ product, setProducts = null, refCard }) {
                 className="carouselNext"
                 data-position="right"
                 onClick={handleCarousel}
+                {...(swiped === product.images.length - 1
+                  ? { style: { display: "none" } }
+                  : {})}
               >
                 <ChevronRight
                   style={{ fontSize: "2.125rem", color: "#8167a9" }}

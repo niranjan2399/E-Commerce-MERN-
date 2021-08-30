@@ -26,7 +26,7 @@ function History() {
   const colors = {
     "Not Processed": "#fdcb6e",
     Processing: "#fdcb6e",
-    Dispatch: "#55efc4",
+    Dispatched: "#55efc4",
     Cancelled: "#e17055",
     Completed: "#00b894",
   };

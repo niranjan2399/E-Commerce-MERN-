@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Check, ExpandMore } from "@material-ui/icons";
 import "./customSelect.scss";
 
@@ -10,10 +10,11 @@ function CustomSelect({
 }) {
   const [open, setOpen] = useState(false);
   const [label, setLabel] = useState();
+  const ul = useRef();
 
   useEffect(() => {
     const temp = options.find((option) => option.value === value);
-    setLabel(temp ? temp.value : "Please Select");
+    setLabel(temp ? temp.title || temp.value : "Please Select");
   }, [options, value]);
 
   const blur = (e) => {
@@ -24,6 +25,20 @@ function CustomSelect({
     setOpen(!open);
   };
 
+  const handleSelect = (e) => {
+    setOpen(false);
+    handleCustomSelect(e);
+
+    const li = Array.from(ul.current.children);
+    li.forEach((element) => {
+      if (element === e.currentTarget) {
+        element.classList.add("selected");
+      } else {
+        element.classList.remove("selected");
+      }
+    });
+  };
+
   return (
     <div className="csContainer" onKeyPress={toggle} tabIndex={0} onBlur={blur}>
       <div
@@ -32,21 +47,24 @@ function CustomSelect({
       >
         <p>{label}</p>
         <div className="csContainer__labelRight">
-          <ExpandMore className="icon" />
+          <ExpandMore className="icon" style={{ color: "white" }} />
         </div>
       </div>
-      <ul className="csContainer__options">
+      <ul className="csContainer__options" ref={ul}>
         {options &&
           options.map((option, i) => {
             return (
               <li
-                className="csContainer__option"
+                className={
+                  "csContainer__option" +
+                  (value === option.value ? " selected" : "")
+                }
                 key={i}
                 data-name={option.name}
                 data-value={option.value}
-                onClick={handleCustomSelect}
+                onClick={handleSelect}
               >
-                <span>{option.value}</span>
+                <span>{option.title || option.value}</span>
                 <Check className="csContainer__check" />
               </li>
             );
