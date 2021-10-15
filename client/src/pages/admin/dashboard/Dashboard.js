@@ -45,7 +45,12 @@ function Dashboard() {
           ) : (
             <div className="progress">
               <CircularProgress
-                style={{ width: "2rem", height: "2rem", color: "#8167a9" }}
+                style={{
+                  width: "2rem",
+                  height: "2rem",
+                  color: "#8167a9",
+                  marginTop: "2rem",
+                }}
               />
             </div>
           )}

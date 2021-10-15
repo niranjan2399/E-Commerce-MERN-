@@ -6,6 +6,7 @@ import "./products.scss";
 import ProductCard from "../../../components/productCard/ProductCard";
 import { listProducts } from "../../../utils/product";
 import { Add } from "@material-ui/icons";
+import { CircularProgress } from "@material-ui/core";
 
 function Products() {
   const [products, setProducts] = useState(null);
@@ -34,7 +35,7 @@ function Products() {
             </Link>
           </div>
           <div className="productContainer__grid">
-            {products &&
+            {products ? (
               products.map((product) => {
                 return (
                   <ProductCard
@@ -43,7 +44,19 @@ function Products() {
                     product={product}
                   />
                 );
-              })}
+              })
+            ) : (
+              <div>
+                <CircularProgress
+                  style={{
+                    color: "#8167a9",
+                    width: "2rem",
+                    height: "2rem",
+                    marginTop: "2rem",
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>

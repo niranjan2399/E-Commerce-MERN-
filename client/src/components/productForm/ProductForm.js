@@ -76,59 +76,41 @@ function ProductForm({ values, handleSubmit, handleChange, setValues }) {
         onChange={handleChange}
       />
       <label>Colors</label>
-      {/* <select
-        multiple
-        value={values.color}
-        onChange={handleChange}
-        required
-        data-
-      > */}
-      {/* <option value="">Please Select</option> */}
       <div className="checkbox__div">
         {colors.map((color, i) => {
           return (
             <CustomCheckbox
               key={i}
               label={color}
+              {...(values.color.includes(color)
+                ? { checked: true }
+                : { checked: false })}
               name="color"
               value={color}
               identifier="multipleColor"
               onChange={handleChange}
             />
-            // <option value={color} key={i}>
-            //   {color}
-            // </option>
           );
         })}
       </div>
-      {/* </select> */}
       <label htmlFor="size">Size</label>
-      {/* <select
-        multiple
-        value={values.size}
-        onChange={handleChange}
-        required
-        data-
-        >
-      <option value="">Please Select</option> */}
       <div className="checkbox__div">
         {sizes.map((size, i) => {
           return (
             <CustomCheckbox
               name="size"
               label={size}
+              {...(values.size.includes(size)
+                ? { checked: true }
+                : { checked: false })}
               value={size}
               key={i}
               onChange={handleChange}
               identifier="multipleSize"
             />
-            // <option value={size} key={i}>
-            //   {size}
-            // </option>
           );
         })}
       </div>
-      {/* </select> */}
       {categories && (
         <div>
           <label>Categories</label>
@@ -148,14 +130,6 @@ function ProductForm({ values, handleSubmit, handleChange, setValues }) {
       {subListAll && (
         <>
           <label htmlFor="subs">Sub Category</label>
-          {/* <select
-            value={values.subs}
-            className="npContainer__subs"
-            multiple
-            onChange={handleChange}
-            data-
-            >
-          <option value="">Please Select</option> */}
           <div className="checkbox__div checkbox__div--sub">
             {subListAll.map((sub, i) => {
               return (
@@ -163,17 +137,16 @@ function ProductForm({ values, handleSubmit, handleChange, setValues }) {
                   label={sub.name}
                   name="subs"
                   value={sub._id}
+                  {...(values.subs.some((s) => s._id === sub._id)
+                    ? { checked: true }
+                    : { checked: false })}
                   identifier="multipleSubs"
                   onChange={handleChange}
                   key={i}
                 />
-                // <option value={sub._id} key={i}>
-                //   {sub.name}
-                // </option>
               );
             })}
           </div>
-          {/* </select> */}
         </>
       )}
       <button type="submit">Save Product</button>

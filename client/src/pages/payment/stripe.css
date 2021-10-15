@@ -130,7 +130,7 @@ button:hover {
   }
 }
 @media only screen and (max-width: 600px) {
-  form {
+  .payment__form {
     width: 80vw;
   }
 }

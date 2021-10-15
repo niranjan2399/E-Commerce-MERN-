@@ -9,6 +9,12 @@
   box-sizing: border-box;
 }
 
+:root {
+  @media (max-width: 500px) {
+    font-size: 0.95rem;
+  }
+}
+
 body {
   font-family: "Poppins", sans-serif;
   background-color: white;

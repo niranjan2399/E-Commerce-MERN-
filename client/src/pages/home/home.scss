@@ -2,11 +2,17 @@
   display: flex;
   flex-direction: column;
 
+  .homeProgress {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+  }
+
   .homeContainer__main {
     display: flex;
     flex-direction: column;
     width: 100%;
-    // width: calc(100% - 18rem);
 
     .homeContainer__section {
       position: relative;
@@ -25,6 +31,10 @@
         margin-bottom: 2rem;
       }
 
+      @media (max-width: 47.9375rem) {
+        padding-inline: 0;
+      }
+
       &:hover {
         .homeContainer__sectionBottom .homeContainer__scrollButtons {
           opacity: 0.6;
@@ -35,6 +45,10 @@
 
           &:last-child {
             transform: translateY(-50%) rotateY(0deg);
+          }
+
+          @media (max-width: 47.9375rem) {
+            display: none;
           }
         }
       }
@@ -56,6 +70,12 @@
         }
         .homeContainer__sectionWrapper {
           display: flex;
+
+          @media (max-width: 47.9375rem) {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+          }
         }
 
         .homeContainer__scrollButtons {

@@ -64,11 +64,11 @@ function ProductUpdate() {
         setValues((pre) => {
           return { ...pre, subListAll: res.data };
         });
-      })();
 
-    document
-      .querySelector(".checkbox__div--sub")
-      .scrollIntoView({ behavior: "smooth" });
+        document
+          .querySelector(".checkbox__div--sub")
+          .scrollIntoView({ behavior: "smooth" });
+      })();
   }, [values.category]);
 
   const handleChange = (e) => {

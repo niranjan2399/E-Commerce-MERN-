@@ -6,6 +6,7 @@ import CategoryList from "../../components/category/CategoryList";
 import { getCategories } from "../../utils/category";
 import { getSubs } from "../../utils/sub";
 import HomePageScrollSection from "../../components/homePageScrollSection/HomePageScrollSection";
+import { CircularProgress } from "@material-ui/core";
 
 function Home() {
   const [newProducts, setNewProducts] = useState(null);
@@ -45,33 +46,41 @@ function Home() {
     <>
       <Navbar />
       <div className="homeContainer">
-        {/* {user && user.role === "admin" ? <AdminSidebar /> : <UserSidebar />} */}
-        <div className="homeContainer__main">
-          {newProducts && (
-            <HomePageScrollSection
-              products={newProducts}
-              title="New Products"
+        {newProducts && bestSellers && categories && subCategories ? (
+          <div className="homeContainer__main">
+            {newProducts && (
+              <HomePageScrollSection
+                products={newProducts}
+                title="New Products"
+              />
+            )}
+            {bestSellers && (
+              <HomePageScrollSection
+                products={bestSellers}
+                title="Best Sellers"
+              />
+            )}
+            {categories && (
+              <section className="homeContainer__section">
+                <div className="homeContainer__sectionTop">Categories</div>
+                <CategoryList list={categories} to="category" />
+              </section>
+            )}
+            {subCategories && (
+              <section className="homeContainer__section">
+                <div className="homeContainer__sectionTop">SubCategories</div>
+                <CategoryList list={subCategories} to="subcategory" />
+              </section>
+            )}
+          </div>
+        ) : (
+          <div className="homeProgress">
+            <CircularProgress
+              className="progress"
+              style={{ color: "#8167a9", width: "2rem", height: "2rem" }}
             />
-          )}
-          {bestSellers && (
-            <HomePageScrollSection
-              products={bestSellers}
-              title="Best Sellers"
-            />
-          )}
-          {categories && (
-            <section className="homeContainer__section">
-              <div className="homeContainer__sectionTop">Categories</div>
-              <CategoryList list={categories} to="category" />
-            </section>
-          )}
-          {subCategories && (
-            <section className="homeContainer__section">
-              <div className="homeContainer__sectionTop">SubCategories</div>
-              <CategoryList list={subCategories} to="subcategory" />
-            </section>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </>
   );

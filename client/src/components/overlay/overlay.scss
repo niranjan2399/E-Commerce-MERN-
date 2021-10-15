@@ -1,5 +1,5 @@
 .overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
   backdrop-filter: blur(2px) contrast(0.5);
   transform: scale(0);

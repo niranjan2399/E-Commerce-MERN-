@@ -46,8 +46,8 @@ function Product() {
     })();
 
     return () => {
-      setProduct([]);
-      setRelated([]);
+      setProduct(null);
+      setRelated(null);
     };
   }, [slug]);
 
@@ -124,6 +124,9 @@ function Product() {
     await setRatings(value, product._id, user.token);
     const res = await getProduct(slug);
     setProduct(res.data);
+
+    formHide(overlay, form);
+    document.body.style.overflowY = "auto";
     toast.success("Thanks for your review");
   };
 
@@ -182,7 +185,7 @@ function Product() {
               </div>
               <div className="pdContainer__ratingMid">
                 <Rating
-                  name={product._id}
+                  name={product && product._id}
                   value={value}
                   precision={0.5}
                   size="large"
@@ -298,7 +301,9 @@ function Product() {
           </div>
         ) : (
           <div style={{ padding: "5rem" }}>
-            <CircularProgress style={{ color: "#8167a9", fontSize: "2rem" }} />
+            <CircularProgress
+              style={{ color: "#8167a9", width: "2rem", height: "2rem" }}
+            />
           </div>
         )}
         {related && (

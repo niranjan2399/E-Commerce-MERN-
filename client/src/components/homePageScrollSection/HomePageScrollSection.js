@@ -40,6 +40,7 @@ const HomePageScrollSection = ({ products, title }) => {
         behavior: "smooth",
       });
     }
+    setScrolled(scrolled - 1);
   };
 
   const scrollRight = () => {
@@ -53,7 +54,7 @@ const HomePageScrollSection = ({ products, title }) => {
     ) {
       section.current.scroll({
         top: 0,
-        left: maxFullCards,
+        left: scrolled + maxFullCards,
         behavior: "smooth",
       });
     } else {
@@ -63,6 +64,7 @@ const HomePageScrollSection = ({ products, title }) => {
         behavior: "smooth",
       });
     }
+    setScrolled(scrolled + 1);
   };
 
   return (

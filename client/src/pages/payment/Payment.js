@@ -160,7 +160,7 @@ const StripeCheckout = () => {
           Total Payable:<span> ${totalAfterDiscount || cartTotal}</span>
         </div>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form className='payment__form' onSubmit={handleSubmit}>
         <CardElement
           id="card-element"
           options={cardStyle}

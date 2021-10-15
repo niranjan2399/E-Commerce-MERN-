@@ -1,8 +1,7 @@
 .navContainer {
   position: sticky;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   top: 0;
   width: 100vw;
   height: 4.5rem;
@@ -10,7 +9,18 @@
   background-color: #fff;
   border-bottom: 1px solid #eee;
   transition: all 0.3s ease-out;
-  z-index: 2;
+  z-index: 3;
+
+  @media (max-width: 768px) {
+    margin-bottom: 2.25rem;
+  }
+
+  .navContainer__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4.5rem;
+  }
 
   .navContainer__logo {
     font-family: "Abril Fatface", cursive !important;
@@ -67,6 +77,52 @@
     }
   }
 
+  .navBar__search {
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      position: absolute;
+      left: 0;
+      top: 3rem;
+      z-index: -1;
+      width: 100%;
+      padding-top: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #eee;
+      background-color: white;
+    }
+
+    .form {
+      display: flex;
+      align-items: center;
+
+      @media (max-width: 768px) {
+        width: 100%;
+        padding-inline: 2rem;
+
+        input {
+          width: 100%;
+        }
+
+        .navContainer__search {
+          margin-left: 0;
+          width: 100%;
+        }
+      }
+    }
+
+    .navBar__searchIcon {
+      @media (min-width: 769px) {
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        display: unset;
+      }
+    }
+  }
+
   .navContainer__left {
     display: flex;
     align-items: center;
@@ -91,6 +147,10 @@
       font-weight: 500;
       text-transform: capitalize;
       cursor: pointer;
+
+      @media (max-width: 768px) {
+        display: none;
+      }
 
       span {
         padding-bottom: 1.5rem;

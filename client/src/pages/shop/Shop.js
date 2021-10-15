@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../../components/navbar/Navbar";
 import { useSelector, useDispatch } from "react-redux";
 import { getByFilter, listProducts } from "../../utils/product";
-import { Slider, Checkbox, Radio, FormControlLabel } from "@material-ui/core";
+import {
+  Slider,
+  Checkbox,
+  Radio,
+  FormControlLabel,
+  CircularProgress,
+  IconButton,
+} from "@material-ui/core";
 import ProductCard from "../../components/productCard/ProductCard";
 import WarningDiv from "../../components/warning/WarningDiv";
 import Accordion from "../../components/accordion/Accordion";
 import { getCategories } from "../../utils/category";
 import { Rating } from "@material-ui/lab";
 import "./shop.scss";
+import { Close, FilterList } from "@material-ui/icons";
 
 const Shop = () => {
   const [products, setProducts] = useState(null);
@@ -21,6 +29,7 @@ const Shop = () => {
   const { search } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
   const { text } = search;
+  const filters = useRef();
   const colorsData = ["Blue", "Red", "Green", "Black", "Silver"];
 
   useEffect(() => {
@@ -155,12 +164,31 @@ const Shop = () => {
     })();
   };
 
+  const hideFilters = () => {
+    filters.current.style = "";
+  };
+
+  const revealFilters = () => {
+    filters.current.style.display = "flex";
+  };
+
   return (
     <>
       <Navbar />
+      <div className="right__top">
+        <button className="option" onClick={revealFilters}>
+          <FilterList style={{ marginRight: ".5rem" }} />
+          Filters
+        </button>
+      </div>
       <div className="shop">
-        <div className="shop__left">
-          <div className="shop__filterHead">Filter Products</div>
+        <div className="shop__left" ref={filters}>
+          <div className="shop__filterHead">
+            Filter Products
+            <button onClick={hideFilters}>
+              <Close />
+            </button>
+          </div>
           <button onClick={clearAll}>Clear All</button>
           <Accordion title="Price">
             <div className="shop__filterSlider">
@@ -276,21 +304,36 @@ const Shop = () => {
           </Accordion>
         </div>
         <div className="shop__right">
-          {products && products.length > 0 ? (
-            products.map((product) => {
-              return <ProductCard product={product} key={product._id} />;
-            })
-          ) : (
-            <div className="shop__warning">
-              <WarningDiv
-                message={
-                  text !== ""
-                    ? "Sorry, No Product Found Matching Your Search"
-                    : "Sorry, No Products Found"
-                }
-              />
-            </div>
-          )}
+          <div className="right__bottom">
+            {products ? (
+              products.length > 0 ? (
+                products.map((product) => {
+                  return <ProductCard product={product} key={product._id} />;
+                })
+              ) : (
+                <div className="shop__warning">
+                  <WarningDiv
+                    message={
+                      text !== ""
+                        ? "Sorry, No Product Found Matching Your Search"
+                        : "Sorry, No Products Found"
+                    }
+                  />
+                </div>
+              )
+            ) : (
+              <div>
+                <CircularProgress
+                  style={{
+                    color: "#8167a9",
+                    width: "2rem",
+                    height: "2rem",
+                    marginTop: "3rem",
+                  }}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
