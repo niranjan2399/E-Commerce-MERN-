@@ -20,6 +20,65 @@
     justify-content: space-between;
     align-items: center;
     height: 4.5rem;
+
+    .hamburger__container {
+      display: none;
+      margin-right: 1.25rem;
+      height: 1.25rem;
+      cursor: pointer;
+
+      @media (max-width: 768px) {
+        display: flex;
+        align-items: center;
+      }
+
+      .hamburger {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        input {
+          display: none;
+
+          &:checked + label {
+            &::after {
+              bottom: 0;
+            }
+
+            &::before {
+              top: 0;
+            }
+          }
+        }
+
+        label {
+          position: relative;
+          display: block;
+          width: 1.75rem;
+          height: 0.125rem;
+          background-color: #8167a9;
+
+          &::after,
+          &::before {
+            position: absolute;
+            content: "";
+            width: 1.75rem;
+            height: 0.125rem;
+            background-color: #8167a9;
+            transition: all 200ms linear;
+            cursor: pointer;
+          }
+
+          &::after {
+            bottom: 0.5rem;
+          }
+
+          &::before {
+            top: 0.5rem;
+          }
+        }
+      }
+    }
   }
 
   .navContainer__logo {

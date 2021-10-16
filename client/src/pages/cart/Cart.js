@@ -26,15 +26,20 @@ const Cart = () => {
 
   useEffect(() => {
     const scrollFunction = () => {
-      if (
-        document.body.clientHeight - window.innerHeight ===
-        Math.round(window.scrollY)
-      ) {
-        setTop(false);
-        floatButton.current.setAttribute("style", "transform: rotateZ(180deg)");
-      } else if (window.scrollY === 0) {
-        setTop(true);
-        floatButton.current.removeAttribute("style");
+      if (floatButton.current) {
+        if (
+          document.body.clientHeight - window.innerHeight ===
+          Math.round(window.scrollY)
+        ) {
+          setTop(false);
+          floatButton.current.setAttribute(
+            "style",
+            "transform: rotateZ(180deg)"
+          );
+        } else if (window.scrollY === 0) {
+          setTop(true);
+          floatButton.current.removeAttribute("style");
+        }
       }
     };
 

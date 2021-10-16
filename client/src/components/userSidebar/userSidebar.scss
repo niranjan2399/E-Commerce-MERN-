@@ -1,12 +1,16 @@
 .sidebar {
   position: sticky;
-  width:18rem;
+  width: 18rem;
   background-color: white;
   height: calc(100vh - 4.5rem);
   top: 4.5rem;
   border-right: 1px solid #eee;
   padding-block: 1.25rem;
   padding-inline: 2rem;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 
   .sidebar__ul {
     list-style: none;

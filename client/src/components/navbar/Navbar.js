@@ -1,19 +1,14 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "./navbar.scss";
 import { NavLink, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import firebase from "firebase/app";
 import { IconButton, Badge } from "@material-ui/core";
-import {
-  ShoppingCart,
-  Person,
-  PersonAdd,
-  Dashboard,
-  Search,
-} from "@material-ui/icons";
+import { ShoppingCart, Person, PersonAdd, Dashboard } from "@material-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import LocalSearch from "../LocalSearch/LocalSearch";
+import NavigationOverlay from "../navigationOverlay/NavigationOverlay";
 
 function Navbar() {
   const [select, setSelect] = useState("login");
@@ -22,6 +17,7 @@ function Navbar() {
   // const state = useSelector((state) => state);
   const { user, search, cart } = useSelector((state) => ({ ...state }));
   const { text } = search;
+  const checkbox = useRef();
 
   const handleLogout = () => {
     firebase.auth().signOut();
@@ -46,10 +42,21 @@ function Navbar() {
     history.push("/shop");
   };
 
+  const toggleActive = () => {
+    checkbox.current.checked = !checkbox.current.checked;
+  };
+
   return (
     <nav className="navContainer">
+      {user && <NavigationOverlay />}
       <div className="navContainer__top">
         <div className="navContainer__left">
+          <div className="hamburger__container" onClick={toggleActive}>
+            <div className="hamburger">
+              <input type="checkbox" name="ham" ref={checkbox} />
+              <label className="line" htmlFor="ham"></label>
+            </div>
+          </div>
           <NavLink
             to="/"
             exact

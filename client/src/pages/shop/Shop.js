@@ -8,7 +8,6 @@ import {
   Radio,
   FormControlLabel,
   CircularProgress,
-  IconButton,
 } from "@material-ui/core";
 import ProductCard from "../../components/productCard/ProductCard";
 import WarningDiv from "../../components/warning/WarningDiv";
