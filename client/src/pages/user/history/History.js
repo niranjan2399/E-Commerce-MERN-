@@ -21,6 +21,10 @@ function History() {
       });
       setOrders(res.data);
     })();
+
+    return () => {
+      setOrders(null);
+    };
   }, [user]);
 
   const colors = {

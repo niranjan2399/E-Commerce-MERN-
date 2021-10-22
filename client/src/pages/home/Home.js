@@ -19,6 +19,10 @@ function Home() {
       const res = await getAccordingly("createdAt", "desc", 4);
       setNewProducts(res.data);
     })();
+
+    return () => {
+      setNewProducts(null);
+    };
   }, []);
 
   useEffect(() => {
@@ -26,6 +30,10 @@ function Home() {
       const res = await getCategories();
       setCategories(res.data);
     })();
+
+    return () => {
+      setCategories(null);
+    };
   }, []);
 
   useEffect(() => {
@@ -33,6 +41,10 @@ function Home() {
       const res = await getSubs();
       setSubCategories(res.data);
     })();
+
+    return () => {
+      setSubCategories(null);
+    };
   }, []);
 
   useEffect(() => {
@@ -40,6 +52,10 @@ function Home() {
       const res = await getAccordingly("sold", "desc", 4);
       setBestSellers(res.data);
     })();
+
+    return () => {
+      setBestSellers(null);
+    };
   }, []);
 
   return (

@@ -1,3 +1,30 @@
 .hamOverlay {
   position: absolute;
+  left: 0;
+  right: 0;
+  top: 4.5rem;
+
+  .hamContainer {
+    .sidebar {
+      width: 100% !important;
+
+      .sidebar__ul {
+        .sidebar__li {
+          .sidebar__link {
+            justify-content: center;
+          }
+        }
+      }
+    }
+
+    .hamOptions {
+      button {
+        padding: 0.5rem 1.5rem;
+        border: 2px solid #8167a9;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+      }
+    }
+  }
 }

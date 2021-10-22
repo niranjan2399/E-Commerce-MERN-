@@ -24,6 +24,10 @@ const Wishlist = () => {
 
       setWishlist(res.data.wishlist);
     })();
+
+    return () => {
+      setWishlist(null);
+    };
   }, [user]);
 
   const handleUpdateWishlist = async (e) => {

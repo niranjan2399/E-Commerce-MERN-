@@ -1,8 +1,24 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
+import firebase from "firebase/app";
 import "./userSidebar.scss";
+import { useDispatch } from "react-redux";
 
 function UserSidebar() {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const handleLogout = () => {
+    firebase.auth().signOut();
+
+    dispatch({
+      type: "LOGOUT",
+      payload: null,
+    });
+
+    history.push("/login");
+  };
+
   return (
     <nav className="sidebar">
       <ul className="sidebar__ul">
@@ -34,6 +50,9 @@ function UserSidebar() {
           </NavLink>
         </li>
       </ul>
+      <div className="hamOptions">
+        <button onClick={handleLogout}>Logout</button>
+      </div>
     </nav>
   );
 }

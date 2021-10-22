@@ -38,6 +38,10 @@ const Shop = () => {
         setProducts(res.data);
       })();
     }
+
+    return () => {
+      setProducts(null);
+    };
   }, [text]);
 
   useEffect(() => {
@@ -52,6 +56,10 @@ const Shop = () => {
         const res = await getByFilter({ query: text });
         setProducts(res.data);
       }
+
+      return () => {
+        setProducts(null);
+      };
     }, 300);
 
     return () => clearTimeout(filteredProducts);
@@ -62,6 +70,10 @@ const Shop = () => {
       const res = await getCategories();
       setCategories(res.data);
     })();
+
+    return () => {
+      setCategories(null);
+    };
   }, []);
 
   const handlePrice = async () => {

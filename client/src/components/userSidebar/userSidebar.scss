@@ -9,7 +9,8 @@
   padding-inline: 2rem;
 
   @media (max-width: 768px) {
-    display: none;
+    // display: none;
+    flex: 0;
   }
 
   .sidebar__ul {
@@ -48,5 +49,20 @@
         }
       }
     }
+  }
+}
+
+.hamOptions {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    border-top: 1px solid #eeeeee;
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  button {
+    margin-inline: auto;
   }
 }
